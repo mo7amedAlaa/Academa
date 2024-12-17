@@ -25,20 +25,18 @@ class AuthRepository
         $user->password =  $authDto->password;
         $user->avatar = $authDto->avatar;
         $user->save();
-
         $user->assignRole('student');
-
         $student = new Student();
         $student->user_id = $user->id;
         $student->save();
-
+        $user->sendEmailVerificationNotification();
         Auth::login($user);
-
         return $user;
     }
 
     public function instructorRegister(AuthDto $authDto): ?User
     {
+
         $user = new User();
         $user->name = $authDto->name;
         $user->email = $authDto->email;
@@ -56,6 +54,7 @@ class AuthRepository
         $instructor->experience_years = $authDto->experience_years;
         $instructor->ssn = $authDto->ssn;
         $instructor->save();
+        $user->sendEmailVerificationNotification();
         Auth::login($user);
         return $user;
     }

@@ -7,6 +7,7 @@ interface CourseContract
 
     public function getAllCourses();
     public function getCourseDetails($id);
+
     public function getRelatedCourses($id);
     public function createCourse($data);
     public function updateCourse($id, $data);

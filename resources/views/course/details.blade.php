@@ -52,6 +52,8 @@
 
 
             <div>
+                @auth
+                @if(auth()->user()->hasRole('student'))
                 @if (Auth::check() && !$hasReviewed)
                 <form action="{{ route('review.store', ['entityType' => 'course' , 'entityId' => $course->id]) }}"
                     method="POST" class="mt-4 bg-white p-6 rounded-lg shadow-lg">
@@ -111,6 +113,8 @@
 
                 </div>
                 @endif
+                @endif
+                @endauth
                 <h3 class="text-2xl font-semibold text-indigo-600 mb-4">Reviews</h3>
                 @if($course->reviews->isEmpty())
                 <p class="text-gray-600">No reviews yet. Be the first to review this course!</p>
@@ -131,10 +135,12 @@
                 @endforeach
                 @endif
             </div>
+
         </div>
 
-
         <div class="w-full md:w-1/3">
+            @auth
+            @if(auth()->user()->hasRole('student'))
             <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
                 <h3 class="text-2xl font-semibold text-indigo-600 mb-4">Enroll Now</h3>
                 <p class="text-lg text-gray-700 mb-4">Price: @if($course->discount > 0)
@@ -164,7 +170,8 @@
                 </form>
 
             </div>
-
+            @endif
+            @endauth
             <!-- Related Courses -->
             <div class="bg-gray-100 rounded-lg shadow-lg p-6">
                 <h3 class="text-2xl font-semibold text-indigo-600 mb-4">Related Courses</h3>

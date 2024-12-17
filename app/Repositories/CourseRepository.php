@@ -2,17 +2,46 @@
 
 namespace App\Repositories;
 
+use App\Dto\CourseDto;
 use App\Models\Course;
+use App\Models\CourseLevel;
+use App\Http\Requests\CourseRequest;
 
 class CourseRepository
 {
 
     protected Course  $course;
+    protected CourseLevel  $courseLevel;
 
     public function __construct()
     {
         $this->course = new Course();
+        $this->courseLevel = new CourseLevel();
     }
+    public function create()
+    {
+        $levels =  $this->courseLevel->all();
+        return $levels;
+    }
+    public function store(CourseDto $request)
+    {
+        $course = new Course();
+        $course->title = $request->title;
+        $course->description = $request->description;
+        $course->instructor_id = $request->instructor_id;
+        $course->duration_hours = $request->duration_hours;
+        $course->status = $request->status;
+        $course->category_id = $request->category_id;
+        $course->isFree = $request->isFree;
+        $course->start_date = $request->start_date;
+        $course->cover_image = $request->cover_image;
+        $course->max_students = $request->max_students;
+        $course->price = $request->price;
+        $course->discount = $request->discount;
+        $course->level_id = $request->level_id;
+        return $course->save();
+    }
+
 
     public function getAllCourses()
     {

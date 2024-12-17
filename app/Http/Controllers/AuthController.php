@@ -30,9 +30,6 @@ class AuthController extends Controller
 
         $user = AuthFacade::register(AuthDto::store($request));
         if ($user) {
-
-
-
             $user->sendEmailVerificationNotification();
             if ($user->hasRole('admin')) {
                 return redirect()->route('admin.dashboard');
@@ -88,11 +85,8 @@ class AuthController extends Controller
     public function instructorDashboard(Request $request)
     {
         $user = Auth::user();
-
-        // Authorize the role
         $this->authorizeRole('instructor');
 
-        // Fetch the instructor
         $instructor = $user->instructor()->with(['user', 'reviews'])->first();
 
         if (!$instructor) {

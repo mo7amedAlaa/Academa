@@ -18,7 +18,7 @@ class InstructorFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' =>  User::inRandomOrder()->first()?->id,
+            'user_id' =>  User::factory()->create()->id,
             'phone' => $this->faker->phoneNumber(),
             'bio' => $this->faker->paragraph(),
             'nationality' => $this->faker->country(),

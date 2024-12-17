@@ -2,75 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Dto\CartDto;
 use Illuminate\Http\Request;
+use App\Http\Requests\CartRequest;
+use App\Http\Controllers\Controller;
+use App\Services\Facades\CartFacade;
 
 class CartController extends Controller
 {
     public function index()
     {
-        $userId = auth()->id();
-        $cartItems = session()->get("cart.$userId", []);
+        $cartItems = CartFacade::index();
 
         return view('student.cart.index', compact('cartItems'));
     }
 
-    public function addToCart(Request $request)
+    public function addToCart(CartRequest $request)
     {
-        $userId = auth()->id();
-        $request->validate([
-            'id' => 'required',
-            'name' => 'required',
-            'price' => 'required|numeric',
-            'cover_image' => 'nullable',
-        ]);
-
-
-        $cart = session()->get("cart.$userId", []);
-
-        if (!isset($cart[$request->id])) {
-            $cart[$request->id] = [
-                'id' => $request->id,
-                'name' => $request->name,
-                'price' => $request->price,
-                'cover_image' => $request->cover_image
-            ];
+        if (CartFacade::addToCart(CartDto::formArray($request))) {
+            return redirect()->back()->with('success', 'Item added to cart!');
+        } else {
+            return redirect()->back()->with('error', 'Item don,t added to cart!');
         }
-
-        session()->put("cart.$userId", $cart);
-
-        return redirect()->back()->with('success', 'Item added to cart!');
     }
-
-    public function update(Request $request)
-    {
-        $userId = auth()->id();
-
-        $request->validate(['id' => 'required']);
-
-        $cart = session()->get("cart.$userId", []);
-
-        if (isset($cart[$request->id])) {
-            session()->put("cart.$userId", $cart);
-            return redirect()->route('cart.index')->with('success', 'Cart updated successfully!');
-        }
-
-        return redirect()->route('student.cart.index')->with('error', 'Item not found in cart!');
-    }
-
     public function remove(Request $request)
     {
-        $userId = auth()->id();
-
         $request->validate(['id' => 'required']);
+        $id = $request->id;
 
-        $cart = session()->get("cart.$userId", []);
-
-        if (isset($cart[$request->id])) {
-            unset($cart[$request->id]);
-            session()->put("cart.$userId", $cart);
-            return redirect()->route('cart.index')->with('success', 'Item removed from cart!');
+        if (CartFacade::remove($id)) {
+            return redirect()->back()->with('success', 'Item added to cart!');
         }
-
         return redirect()->route('student.cart.index')->with('error', 'Item not found in cart!');
     }
 }

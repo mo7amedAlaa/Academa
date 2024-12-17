@@ -3,7 +3,7 @@
 @section('title', 'Academa | Favorites')
 
 @section('content')
-<div class="container mx-auto my-12 px-6">
+<div class="container mx-auto py-12 px-2 md:px-4 min-h-screen">
 
     @if (session('success'))
     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
@@ -33,7 +33,7 @@
     <p class="text-lg mb-8 text-gray-700">Courses you have added to your favorites!</p>
 
     @if(!$favorites || $favorites->isEmpty())
-    <div class="text-center bg-gray-100 p-6 rounded-lg shadow-md">
+    <div class="text-center bg-gray-100 p-6 rounded-lg shadow-md ">
         <p class="text-gray-700 text-lg mb-4">No favorite courses found!</p>
         <a href="{{ route('welcome') }}"
             class="inline-block bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700">

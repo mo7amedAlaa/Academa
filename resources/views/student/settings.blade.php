@@ -3,7 +3,7 @@
 @section('title', 'Account Settings')
 
 @section('content')
-<div class="flex justify-center items-center min-h-screen">
+<div class="container mx-auto flex justify-center items-center  py-12 px-2 md:px-4 min-h-screen">
     <div class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
 
         <!-- Page Title -->

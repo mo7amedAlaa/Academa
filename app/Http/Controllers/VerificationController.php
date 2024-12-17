@@ -12,13 +12,10 @@ class VerificationController extends Controller
     public function verify(Request $request)
     {
         $user = Auth::user();
-
-        // Check if the user is already verified
         if ($user->hasVerifiedEmail()) {
             return redirect()->route('profile.show')->with('status', 'Your email is already verified.');
         }
 
-        // Verify the email
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
         }

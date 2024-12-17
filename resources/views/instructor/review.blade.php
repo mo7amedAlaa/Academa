@@ -41,6 +41,7 @@
 
         {{-- Review Form --}}
         @auth
+        @if(auth()->user()->hasRole('student'))
         @php
         $userReview = $reviews->firstWhere('user_id', auth()->id());
         @endphp
@@ -88,14 +89,12 @@
                 Review</button>
         </form>
         @endif
-        @else
-        <p class="text-gray-700 mt-4">Please <a href="{{ route('login') }}" class="text-blue-500 underline">login</a> to
-            leave a review.</p>
+        @endif
         @endauth
 
         {{-- Reviews List --}}
         <div class="mt-6">
-            @forelse($reviews->where('user_id', '!=', auth()->id()) as $review)
+            @forelse($reviews as $review)
             <div class="bg-white p-4 rounded-lg shadow mb-4">
                 <div class="flex justify-between">
                     <div>

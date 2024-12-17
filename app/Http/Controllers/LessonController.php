@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Lesson;
+use App\Notifications\NewLessonNotification;
 use Illuminate\Http\Request;
 
 class LessonController extends Controller
@@ -43,6 +44,9 @@ class LessonController extends Controller
         $validated['instructor_id'] = $course->instructor->id;
 
         $course->lessons()->create($validated);
+        foreach ($course->students as $student) {
+            $student->user->notify(new NewLessonNotification($request->title, $course->title, $course->instructor->user->name, $course->id));
+        }
 
         return redirect()->route('instructor.courses.content', $course)
             ->with('success', 'Lesson added successfully!');

@@ -95,31 +95,26 @@
         <h2 class="text-2xl font-bold mb-4">Analytics</h2>
         <div class="grid grid-cols-2 gap-4">
 
-            <!-- Students Enrolled -->
             <div class="text-center bg-gray-100 p-4 rounded-lg">
                 <p class="text-3xl font-bold">{{ $courses->sum('students_count') }}</p>
                 <p class="text-gray-700">Students Enrolled</p>
             </div>
 
-            <!-- Courses Created -->
             <div class="text-center bg-gray-100 p-4 rounded-lg">
                 <p class="text-3xl font-bold">{{ $courses->count() }}</p>
                 <p class="text-gray-700">Courses Created</p>
             </div>
 
-            <!-- Draft Courses -->
             <div class="text-center bg-gray-100 p-4 rounded-lg">
                 <p class="text-3xl font-bold">{{ $courses->where('status', 'draft')->count() }}</p>
                 <p class="text-gray-700">Draft Courses</p>
             </div>
 
-            <!-- Published Courses -->
             <div class="text-center bg-gray-100 p-4 rounded-lg">
                 <p class="text-3xl font-bold">{{ $courses->where('status', 'published')->count() }}</p>
                 <p class="text-gray-700">Published Courses</p>
             </div>
 
-            <!-- Archived Courses -->
             <div class="text-center bg-gray-100 p-4 rounded-lg">
                 <p class="text-3xl font-bold">{{ $courses->where('status', 'archived')->count() }}</p>
                 <p class="text-gray-700">Archived Courses</p>

@@ -13,7 +13,6 @@ class RolesAndPermissionsSeeder extends Seeder
         // Reset cached roles and permissions
         app()['cache']->forget('spatie.permission.cache');
 
-        // الأذونات المرغوبة
         $permissionsToAdd = [
             'manage users',
             'manage courses',
@@ -23,10 +22,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'view instructors',
             'manage instructors',
             'manage categories',
-            'view dashboard', // إذن جديد
+            'view dashboard',
         ];
 
-        // الأذونات غير المرغوبة
         $permissionsToRemove = [
             'mange users', // إذن غير صحيح (خطأ في الكتابة)
             'view courses', // حذف
@@ -45,7 +43,6 @@ class RolesAndPermissionsSeeder extends Seeder
             }
         }
 
-        // إنشاء الأدوار وإعطاء الأذونات
         $admin = Role::firstOrCreate(['name' => 'admin']);
         $admin->syncPermissions([
             'manage users',

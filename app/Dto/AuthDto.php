@@ -77,7 +77,7 @@ class AuthDto
             password: $request->password,
             avatar: $avatarPath,
             bio: $request->bio,
-            phone: null,
+            phone: $request->phone,
             nationality: $request->nationality,
             age: $request->age,
             experience_card: $experienceCardPath,

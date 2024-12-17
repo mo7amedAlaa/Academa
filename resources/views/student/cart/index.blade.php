@@ -1,9 +1,9 @@
 @extends('layouts.Layout')
 @section('title', 'Academa | Shopping Cart')
 @section('content')
-<div class="container mx-auto px-4">
-    <h1 class="text-2xl font-bold mb-6">Shopping Cart</h1>
-
+<div class="container mx-auto  py-12 px-2 md:px-4 min-h-screen">
+    <h1 class="text-4xl font-semibold mb-6 text-indigo-700">Shopping Cart</h1>
+    <p class="text-lg mb-8 text-gray-700">Courses you have added to your Cart!</p>
     @if(session('success'))
     <div class="bg-green-100 text-green-800 px-4 py-3 rounded mb-4">
         {{ session('success') }}
@@ -55,7 +55,14 @@
     </div>
 
     @else
-    <p>Your cart is empty.</p>
+    <div class="text-center bg-gray-100 p-6 rounded-lg shadow-md">
+        <p class="text-gray-700 text-lg mb-4">Your cart is empty.!</p>
+        <a href="{{ route('welcome') }}"
+            class="inline-block bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700">
+            Browse Courses
+        </a>
+    </div>
+
     @endif
 </div>
 @endsection

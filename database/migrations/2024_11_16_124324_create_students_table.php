@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('interests_field')->nullable()->constrained('categories')->onDelete('cascade')->onDelete('cascade');
+            $table->foreignId('interests_field')->nullable()->constrained('categories')->onDelete('cascade')->onUpdate('cascade');
             $table->string('phone')->nullable();
             $table->text('address')->nullable();
             $table->boolean('is_premium')->default(false);

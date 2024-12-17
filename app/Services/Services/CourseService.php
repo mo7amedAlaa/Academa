@@ -2,6 +2,8 @@
 
 namespace App\Services\Services;
 
+use App\Dto\CourseDto;
+use App\Http\Requests\CourseRequest;
 use App\Repositories\CourseRepository;
 use App\Services\Contracts\CourseContract;
 
@@ -11,6 +13,15 @@ class CourseService implements CourseContract
     public function __construct()
     {
         $this->courseRepository = new CourseRepository();
+    }
+
+    public function create()
+    {
+        return $this->courseRepository->create();
+    }
+    public function store(CourseDto $request)
+    {
+        return $this->courseRepository->store($request);
     }
     public function getAllCourses()
     {

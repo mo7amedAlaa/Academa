@@ -11,7 +11,7 @@
     @vite('resources/css/app.css')
 </head>
 
-<body class="flex flex-col min-h-screen">
+<body class="  flex flex-col min-h-screen ">
     @include('partials.Header', ['searchResult' => $searchResult ?? null])
     <main class="flex-1 container mx-auto p-4">
         @yield('content')

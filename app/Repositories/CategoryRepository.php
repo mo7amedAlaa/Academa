@@ -11,6 +11,10 @@ class CategoryRepository
     {
         $this->category = new Category();
     }
+    public function showInboxCourses($id)
+    {
+        return $this->category->with('courses')->findOrFail($id);
+    }
     public function getAllCategories_sub()
     {
         return $this->category->with('subcategories')->get();

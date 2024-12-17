@@ -2,16 +2,18 @@
 
 namespace App\Providers;
 
-use App\Services\Facades\CourseFacade;
-use App\Services\Services\CheckoutService;
-use App\Services\Services\FavoriteService;
 use Illuminate\Support\Facades\View;
 use App\Repositories\SearchRepository;
+use App\Services\Facades\CourseFacade;
 use App\Services\Services\AuthService;
+use App\Services\Services\CartService;
 use Illuminate\Support\ServiceProvider;
 use App\Services\Services\CourseService;
 use App\Services\Services\SearchService;
+use App\Services\Services\AccountService;
 use App\Services\Services\CategoryService;
+use App\Services\Services\CheckoutService;
+use App\Services\Services\FavoriteService;
 use App\Services\Services\PersonalizeService;
 
 class AppServiceProvider extends ServiceProvider
@@ -58,6 +60,12 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->bind('checkoutService',  function () {
             return new CheckoutService();
+        });
+        $this->app->bind('accountService',  function () {
+            return new AccountService();
+        });
+        $this->app->bind('cartService',  function () {
+            return new CartService();
         });
     }
 

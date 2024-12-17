@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('course_registrations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
-            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
+            $table->foreignId('student_id')->constrained('students')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('progress_percentage')->default(0);
             $table->date('registration_date')->default(now());
             $table->date('expired_date')->nullable();

@@ -16,6 +16,11 @@ class CategoryService implements CategoryContract
     {
         return $this->categoryRepository->getAllCategories_sub();
     }
+    public function showInboxCourses($id)
+    {
+        return $this->categoryRepository->showInboxCourses($id);
+    }
+
     public function getMainCategories()
     {
         return $this->categoryRepository->getMainCategories();

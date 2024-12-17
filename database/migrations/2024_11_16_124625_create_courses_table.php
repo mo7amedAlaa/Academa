@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('instructor_id')->constrained('instructors');
+            $table->foreignId('instructor_id')->constrained('instructors')->onDelete('cascade')->onUpdate('cascade');
             $table->string('title');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2)->nullable();
@@ -24,8 +24,8 @@ return new class extends Migration
             $table->date('start_date')->nullable();
             $table->string('status');
             $table->boolean('isFree')->nullable()->default(false);
-            $table->foreignId('category_id')->constrained('categories');
-            $table->foreignId('level_id')->constrained('course_levels');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('level_id')->constrained('course_levels')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

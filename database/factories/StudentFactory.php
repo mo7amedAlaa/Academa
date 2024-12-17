@@ -19,7 +19,7 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::inRandomOrder()->first()?->id ?? User::factory()->create()->id,
+            'user_id' =>  User::factory()->create()->id,
             'phone' => $this->faker->phoneNumber(),
             'address' => $this->faker->address(),
             'interests_field' => Category::inRandomOrder()->first()?->id ?? Category::factory()->create()->id,

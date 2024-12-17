@@ -32,7 +32,7 @@
                     <button type="submit" title="Show Details" class="text-4xl text-yellow-500 hover:text-yellow-700">
                         <i class="fa-solid fa-circle-info"></i> </button>
                 </form>
-
+                @if(auth()->user()?->hasRole('student'))
                 <form action="{{ route('cart.add') }}" method="POST">
                     @csrf
                     <input type="hidden" name="id" value="{{ $course->id }}">
@@ -56,6 +56,7 @@
                         <i class="fas fa-heart"></i>
                     </button>
                 </form>
+                @endif
             </div>
         </div>
     </div>

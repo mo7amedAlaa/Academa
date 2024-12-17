@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Dto\CourseDto;
 use App\Models\Course;
 use App\Models\CourseLevel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CourseRequest;
 use App\Services\Facades\CourseFacade;
 
 class CourseController extends Controller
@@ -19,46 +21,20 @@ class CourseController extends Controller
      */
     public function create()
     {
-
-        $levels = CourseLevel::all();
+        $levels = CourseFacade::create();
         return view('course.create', compact('levels'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CourseRequest $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'nullable|numeric|min:0',
-            'discount' => 'nullable|numeric|min:0|max:100',
-            'max_students' => 'nullable|integer|min:1',
-            'duration_hours' => 'nullable|integer|min:1',
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'start_date' => 'nullable|date',
-            'status' => 'required|in:draft,published,archived',
-            'isFree' => 'boolean',
-            'category_id' => 'required|exists:categories,id',
-            'level_id' => 'required|exists:course_levels,id',
-        ]);
+        if (CourseFacade::store(CourseDto::formArray(request: $request))) {
 
-        if ($request->hasFile('cover_image')) {
-            $image = $request->file('cover_image');
-            $imageName = uniqid('course_') . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('uploads/courses');
-            $image->move($destinationPath, $imageName);
-            $validated['cover_image'] = 'uploads/courses/' . $imageName;
+            return redirect()->route('courses.create')->with('success', 'Course created successfully.');
         }
-
-
-        $validated['instructor_id'] = auth()->user()->instructor->id;
-
-
-        Course::create($validated);
-
-        return redirect()->route('courses.create')->with('success', 'Course created successfully.');
+        return redirect()->route('courses.create')->with('error', 'Course created faild.');
     }
 
 
@@ -91,10 +67,9 @@ class CourseController extends Controller
 
     public function update(Request $request, Course $course)
     {
-
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'required|string|max:500',
             'price' => 'nullable|numeric|min:0',
             'discount' => 'nullable|numeric|min:0|max:100',
             'max_students' => 'nullable|integer|min:1',
@@ -102,17 +77,38 @@ class CourseController extends Controller
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'start_date' => 'nullable|date',
             'status' => 'required|in:draft,published,archived',
-            'isFree' => 'boolean',
+            'isFree' => 'nullable|boolean',
             'category_id' => 'required|exists:categories,id',
             'level_id' => 'required|exists:course_levels,id',
         ]);
 
+        $cover_imagePath = $course->cover_image;
 
+        if ($request->hasFile('cover_image') && $request->file('cover_image')->isValid()) {
+            $cover_image = $request->file('cover_image');
+            $cover_imageName = uniqid('cover_image_') . '.' . $cover_image->getClientOriginalExtension();
+            $cover_image->move(public_path('uploads/courses/'), $cover_imageName);
+            $cover_imagePath = "uploads/courses/" . $cover_imageName;
+        }
 
-        $course->update($request->all());
+        $course->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+            'discount' => $validated['discount'],
+            'max_students' => $validated['max_students'],
+            'duration_hours' => $validated['duration_hours'],
+            'cover_image' => $cover_imagePath,
+            'start_date' => $validated['start_date'],
+            'status' => $validated['status'],
+            'isFree' => $validated['isFree'] ?? false,
+            'category_id' => $validated['category_id'],
+            'level_id' => $validated['level_id'],
+        ]);
 
-        return redirect()->route('instructors.dashboard')->with('success', 'Course updated successfully!');
+        return redirect()->back()->with('success', 'Course updated successfully!');
     }
+
 
     public function destroy(Course $course)
     {

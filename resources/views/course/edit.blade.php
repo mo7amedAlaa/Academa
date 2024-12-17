@@ -21,7 +21,8 @@
     </div>
     @endif
 
-    <form action="{{ route('courses.update', $course) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('courses.update', $course) }}" method="POST" enctype="multipart/form-data"
+        class="flex flex-col space-y-6 ">
         @csrf
         @method('PUT')
 
@@ -74,14 +75,6 @@
             @enderror
         </div>
 
-        <div>
-            <label for="cover_image" class="block text-sm font-medium text-gray-700">Cover Image</label>
-            <input type="file" name="cover_image" id="cover_image" placeholder="Choose a cover image"
-                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-            @error('cover_image')
-            <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div>
 
         <div>
             <label for="duration_hours" class="block text-sm font-medium text-gray-700">Duration (days)</label>
@@ -150,7 +143,28 @@
             <p class="text-red-600 text-sm">{{ $message }}</p>
             @enderror
         </div>
+        <div class=" flex items-center justify-center">
 
+            <div class="w-full ">
+                <label for="cover_image" class="block text-sm font-medium text-gray-700">Cover Image</label>
+                <input type="file" name="cover_image" id="cover_image" placeholder="Choose a cover image"
+                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                @error('cover_image')
+                <p class="text-red-600 text-sm">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="w-full flex items-center justify-center bg-gray-100 ">
+
+                @if($course->cover_image)
+                <div class="w-32 h-32 rounded-lg">
+                    <img src="{{ asset($course->cover_image) }}" alt="Current cover image"
+                        class=" w-full rounded-lg shadow-sm">
+                </div>
+                @else
+                <p>no current image</p>
+                @endif
+            </div>
+        </div>
         <div class="flex items-center">
             <input type="checkbox" name="isFree" id="isFree" value="1" {{ old('isFree', $course->isFree) ? 'checked' :
             '' }}

@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="flex flex-col">
-    <!-- Welcome Section -->
+
     @auth
     <div class="flex items-center bg-gradient-to-r from-indigo-500 to-indigo-700 p-8 rounded-lg shadow-xl mb-8 w-full">
         <i class="fas fa-user-circle text-6xl text-white mr-6"></i>
@@ -51,7 +51,7 @@
     @endauth
 
 
-    <!-- Courses Section -->
+
     <div class="my-12 px-6">
         @foreach ([
         ['title' => 'Top Rated Courses', 'description' => 'These courses are highly rated by students like you!',

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Services\Facades\CategoryFacade;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Facades\CategoryFacade;
 
 class CategoryController extends Controller
 {
@@ -16,7 +17,7 @@ class CategoryController extends Controller
 
     public function showCourses($id)
     {
-        $category = Category::with('courses')->findOrFail($id);
+        $category = CategoryFacade::showInboxCourses($id);
         return view('course.courseInCategory', compact('category'));
     }
     public function create()

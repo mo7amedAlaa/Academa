@@ -40,7 +40,7 @@ class ProfileController extends Controller
             'bio' => 'nullable|string|max:500',
             'age' => 'nullable|integer|min:6|max:120',
             'nationality' => 'nullable|string|max:255',
-            'interests_field' => 'nullable|integer',
+            'interests_field' => 'nullable',
             'experience_years' => 'nullable|integer|min:0',
         ]);
 
@@ -54,6 +54,7 @@ class ProfileController extends Controller
             $user->student->update([
                 'phone' => $validated['phone'],
                 'address' => $validated['address'],
+                'interests_field' => $validated['interests_field'],
             ]);
         }
 
@@ -63,7 +64,6 @@ class ProfileController extends Controller
                 'bio' => $validated['bio'],
                 'age' => $validated['age'],
                 'nationality' => $validated['nationality'],
-                'interests_field' => $validated['interests_field'] ?? null,
                 'experience_years' => $validated['experience_years'],
             ]);
         }

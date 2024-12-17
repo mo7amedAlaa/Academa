@@ -30,6 +30,10 @@ class NotificationController extends Controller
 
             return redirect()->route('instructor.review', ['id' => $notification->data['instructor_id']]);
         }
+        if ($notification->type === 'App\Notifications\NewLessonNotification') {
+
+            return redirect()->route('courses.content', ['course_id' => $notification->data['course_id']]);
+        }
 
 
         return redirect()->route('welcome')->with('error', 'Notification data is invalid.');

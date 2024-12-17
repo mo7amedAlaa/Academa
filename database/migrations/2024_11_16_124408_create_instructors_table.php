@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('experience_years')->nullable();
             $table->string('experience_card');
             $table->integer('age')->nullable();
-            $table->integer('ssn');
+            $table->bigInteger('ssn');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

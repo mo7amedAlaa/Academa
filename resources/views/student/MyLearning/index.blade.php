@@ -3,7 +3,7 @@
 @section('title', 'My Learning')
 
 @section('content')
-<div class="container mx-auto py-10 px-5">
+<div class="container mx-auto  py-12 px-2 md:px-4 min-h-screen">
     <h1 class="text-center text-3xl font-bold mb-8">My Learning</h1>
 
     @if($courses->isEmpty())

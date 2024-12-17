@@ -87,7 +87,7 @@
 
                 // Generate content based on lesson type
                 let contentHTML = `<h5 class="text-lg font-semibold">${lesson.title}</h5>`;
-                contentHTML += `<p>${lesson.content}</p>`;
+                contentHTML += `<p>${lesson.notes}</p>`;
 
                 if (lesson.content_type === 'video') {
                     contentHTML += `<div class="h-full w-full">
@@ -108,7 +108,14 @@
                     contentHTML += `<div class="h-full w-full">
                         <a href="{{ asset('${lesson.link}') }}" class="bg-green-500 text-white py-2 px-4 rounded-lg">Start Quiz</a>
                     </div>`;
+                } else if (lesson.content_type === 'link') {
+                    contentHTML += `<div class="h-full w-full">
+                        <a href=" ${lesson.link} " class="bg-green-500 text-white py-2 px-4 rounded-lg">go to link</a>
+                    </div>`;
+                } else {
+                    contentHTML += `<p class="text-center">No content available for this lesson.</p>`;
                 }
+
 
                 lessonContent.innerHTML = contentHTML;
             });

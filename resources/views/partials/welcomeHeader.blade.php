@@ -24,7 +24,7 @@
                 @foreach ($categories as $category)
                 @if (is_null($category->parent_id))
                 <li class="relative">
-                    <button class="block px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center justify-between"
+                    <button class="  px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center justify-between"
                         onclick="toggleSubcategories({{ $category->id }})">
                         <span>{{ $category->name }}</span>
                         @if ($category->subcategories->count() > 0)

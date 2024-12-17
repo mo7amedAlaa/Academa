@@ -1,5 +1,5 @@
-<header class="bg-white shadow-md py-4">
-    <div class="mx-auto flex items-center justify-between px-4">
+<header class="bg-white shadow-md py-4   ">
+    <div class="mx-auto flex     items-center justify-between px-4">
         <div class="flex items-center space-x-4 w-12 h-12 rounded-full">
             <a href="{{ route('welcome') }}" class="w-full h-full rounded-full">
                 <img src="{{ asset('logo.webp') }}" alt="Logo"
@@ -148,7 +148,7 @@
                 class="text-gray-600 hover:text-blue-600 font-medium">instructor</a>
 
             @auth
-
+            @if(auth()->user()?->hasRole('student'))
             <a href="{{route('my-learning')}}" class="text-gray-600 hover:text-blue-600 font-medium">My Learning</a>
             <a href="{{route('favorites.index')}}" class="text-gray-600 hover:text-blue-600 relative">
                 <span
@@ -161,6 +161,7 @@
                 </span>
                 <i class="fas fa-shopping-cart text-2xl"></i>
             </a>
+            @endif
             <div class="relative group">
                 <a href="#" class="text-gray-600 hover:text-blue-600  ">
                     <span
@@ -221,6 +222,18 @@
                                 </small>
                             </a>
                         </li>
+                        @elseif($type === 'NewLessonNotification')
+                        <li>
+                            <a href="{{ route('notification.read', $notification->id) }}"
+                                class="block p-4 {{ $notification->read_at != null ? '' : 'bg-gray-100' }}">
+                                <p>A new lesson titled "{{ $notification->data['lesson_title'] }}" has been added to the
+                                    course "{{
+                                    $notification->data['course_name'] }}" by instructor "{{
+                                    $notification->data['course_instructor'] }}".</p>
+                                <small>Received on {{ $notification->created_at->diffForHumans() }}</small>
+                            </a>
+                        </li>
+
                         @else
                         <li>
                             <a href="{{ route('notification.read', $notification->id) }}"
@@ -251,10 +264,20 @@
                     class="absolute right-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg hidden group-hover:block">
                     <ul class="p-4 space-y-2">
                         <li class="text-gray-700 text-lg">Hi, {{ $user->name }}</li>
-                        <li class="border-t pt-2 text-sm text-gray-700 hover:text-blue-600">
+                        @auth
+                        @if(auth()->user()->hasRole('student'))
+                        <li><a href="{{ route('student.dashboard') }}"
+                                class="border-t  pt-2 text-sm text-gray-700 hover:text-green-600">Dashboard</a></li>
+                        @elseif(auth()->user()->hasRole('instructor'))
+                        <li><a href="{{ route('instructors.dashboard') }}"
+                                class="border-t pt-2 text-sm text-gray-700 hover:text-green-600">Dashboard</a>
+                        </li>
+                        @endif
+                        @endauth
+                        <li class="   text-sm text-gray-700 hover:text-blue-600">
                             <a href="{{route('profile.show')}}">Profile</a>
                         </li>
-                        <li class="text-sm text-gray-700 hover:text-blue-600">
+                        <li class="text-sm text-gray-700 hover:text-black ">
                             <a href="{{route('settings')}}">Settings</a>
                         </li>
                         <li class="text-sm text-gray-700 hover:text-red-600">
