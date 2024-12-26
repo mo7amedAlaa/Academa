@@ -4,19 +4,32 @@
 
 @section('content')
 <div class="container mx-auto py-12 px-2 md:px-4 min-h-screen">
-
-    @if (session('success'))
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-        <p>{{ session('success') }}</p>
-    </div>
+    @if(session('error'))
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            Toastify({
+                text: "{{ session('error') }}",
+                backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+                close: true,
+                duration: 3000
+            }).showToast();
+        });
+    </script>
     @endif
 
-
-    @if (session('error'))
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-        <p>{{ session('error') }}</p>
-    </div>
+    @if(session('success'))
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            Toastify({
+                text: "{{ session('success') }}",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                close: true,
+                duration: 3000
+            }).showToast();
+        });
+    </script>
     @endif
+
 
 
     @if ($errors->any())

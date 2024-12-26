@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Lesson;
+use App\Models\LessonStatus;
 use App\Notifications\NewLessonNotification;
 use Illuminate\Http\Request;
 
@@ -87,6 +88,55 @@ class LessonController extends Controller
         return redirect()->route('instructor.courses.content', $lesson->course_id)
             ->with('success', 'Lesson updated successfully!');
     }
+    /**
+     * make a lesson complete
+
+     */
+    public function complete($lesson_id)
+    {
+        $lesson = Lesson::find($lesson_id);
+
+        if (!$lesson) {
+            return redirect()->back()->with('error', 'Lesson not found!');
+        }
+
+        $course = $lesson->course;
+        $user = auth()->user();
+        $student = $user->student;
+
+        $lessonStatus = $student->lessonStatus()->where('lesson_id', $lesson->id)->first();
+        if (!$lessonStatus) {
+            $lessonStatus = new LessonStatus();
+            $lessonStatus->student_id = $student->id;
+            $lessonStatus->course_id = $course->id;
+            $lessonStatus->lesson_id = $lesson->id;
+            $lessonStatus->status = 'completed';
+            $lessonStatus->save();
+        } else {
+
+            $lessonStatus->status = 'completed';
+            $lessonStatus->save();
+            return redirect()->back()->with('error', 'Lesson already marked as complete and progress Don`t  updated!');
+        }
+
+        $totalLessons = $course->lessons->count();
+        $completedLessons = $student->lessonStatus()
+            ->where('status', 'completed')
+            ->where('course_id', $course->id)
+            ->count();
+
+
+
+        $progressPercentage = min(($completedLessons / $totalLessons) * 100, 100);
+
+        $student->courses()->updateExistingPivot($course->id, ['progress_percentage' => $progressPercentage]);
+
+        return redirect()->back()->with('success', 'Lesson marked as complete and progress updated!');
+    }
+
+
+
+
 
     /**
      * Remove the specified lesson from storage.
@@ -94,7 +144,6 @@ class LessonController extends Controller
     public function destroy(Lesson $lesson)
     {
         $lesson->delete();
-
         return redirect()->route('instructor.courses.content', $lesson->course_id)
             ->with('success', 'Lesson deleted successfully!');
     }

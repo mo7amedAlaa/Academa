@@ -2,7 +2,7 @@
     <div class="mx-auto flex     items-center justify-between px-4">
         <div class="flex items-center space-x-4 w-12 h-12 rounded-full">
             <a href="{{ route('welcome') }}" class="w-full h-full rounded-full">
-                <img src="{{ asset('logo.webp') }}" alt="Logo"
+                <img src="{{ asset($settings['site_logo'] ?? 'logos/default-logo.png') }}" alt="Logo"
                     class="text-2xl w-full h-full rounded-full font-bold text-blue-600">
             </a>
         </div>
@@ -171,7 +171,7 @@
                     <i class="fas fa-bell text-2xl"></i>
                 </a>
                 <div
-                    class="p-4 notifications absolute max-h-96 right-0 w-96 bg-white border border-gray-200 rounded-lg shadow-lg hidden group-hover:block overflow-y-auto">
+                    class="p-4 notifications absolute max-h-96 right-0 w-96 bg-white border border-gray-200 rounded-lg shadow-lg hidden group-hover:block overflow-y-auto z-50">
                     <div class="flex justify-between items-center mb-4">
                         <h4 class="text-lg font-semibold">Notifications</h4>
                         <form action="{{ route('notifications.clear') }}" method="POST">
@@ -231,6 +231,15 @@
                                     $notification->data['course_name'] }}" by instructor "{{
                                     $notification->data['course_instructor'] }}".</p>
                                 <small>Received on {{ $notification->created_at->diffForHumans() }}</small>
+                            </a>
+                        </li>
+                        @elseif($type === 'NewCourseEnrolled')
+                        <li>
+                            <a href="{{ route('notification.read', $notification->id) }}"
+                                class="block p-4 {{ $notification->read_at != null ? '' : 'bg-gray-100' }}">
+                                <p>A new course titled "{{ $notification->data['course_title'] }}" has been
+                                    enrolled,Check your Learning.
+                                    <small>Received on {{ $notification->created_at->diffForHumans() }}</small>
                             </a>
                         </li>
 

@@ -11,6 +11,7 @@ class AuthDto
     public function __construct(
         public readonly string $email,
         public readonly string $password,
+        public readonly ?bool $remember = null,
         public readonly ?string $name = null,
         public readonly ?string $avatar = null,
         public readonly ?string $bio = null,
@@ -45,6 +46,8 @@ class AuthDto
         return new self(
             email: $request->email,
             password: $request->password,
+            remember: $request->has('remember'),
+
         );
     }
 

@@ -1,7 +1,31 @@
 @extends('layouts.Layout')
 
 @section('title', 'Account Settings')
+@if(session('error'))
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        Toastify({
+            text: "{{ session('error') }}",
+            backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+            close: true,
+            duration: 3000
+        }).showToast();
+    });
+</script>
+@endif
 
+@if(session('success'))
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        Toastify({
+            text: "{{ session('success') }}",
+            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+            close: true,
+            duration: 3000
+        }).showToast();
+    });
+</script>
+@endif
 @section('content')
 <div class="container mx-auto flex justify-center items-center  py-12 px-2 md:px-4 min-h-screen">
     <div class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">

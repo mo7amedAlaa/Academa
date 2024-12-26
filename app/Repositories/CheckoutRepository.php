@@ -3,7 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Course;
+use App\Models\Payment;
 use App\Notifications\CourseRegistrationNotification;
+use App\Notifications\NewCourseEnrolled;
 use Illuminate\Http\Request;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
@@ -43,7 +45,11 @@ class CheckoutRepository
                 'payment_method_types' => ['card'],
                 'line_items' => $lineItems,
                 'mode' => 'payment',
-                'success_url' => route('checkout.success', ['course_ids' => implode(',', $courseIds)]),
+                'success_url' => route('checkout.success', [
+                    'course_ids' => implode(',', $courseIds),
+                    'payment_intent' => '{PAYMENT_INTENT}',
+                    'amount' => array_sum(array_column($cartItems, 'price')),
+                ]),
                 'cancel_url' => route('checkout.cancel'),
             ]);
 
@@ -58,12 +64,13 @@ class CheckoutRepository
     {
         $user = auth()->user();
         $courseIds = explode(',', $request->query('course_ids'));
-
+        $paymentIntent = $request->query('payment_intent');
+        $amount = $request->query('amount');
         foreach ($courseIds as $courseId) {
             $course = Course::find($courseId);
             if ($course) {
                 $registrationDate = now();
-                $expiredDate = $registrationDate->copy()->addMonths($course->duration_hours);
+                $expiredDate = $registrationDate->copy()->addHours($course->duration_hours);
 
                 $user->student->courses()->syncWithoutDetaching([
                     $courseId => [
@@ -81,7 +88,22 @@ class CheckoutRepository
                     'registration_date' => $registrationDate->toFormattedDateString(),
                 ]));
             }
+            if ($user) {
+                $user->notify(new NewCourseEnrolled([
+                    'course_title' => $course->title,
+                    'course_id' => $course->id,
+                ]));
+            }
         }
+        Payment::create([
+            'user_id' => $user->id,
+            'payment_id' => $paymentIntent,
+            'amount' => $amount,
+            'payment_method' => 'card',
+            'status' => 'completed',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         session()->forget("cart." . $user->id);
 

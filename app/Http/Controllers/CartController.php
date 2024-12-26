@@ -31,7 +31,7 @@ class CartController extends Controller
         $id = $request->id;
 
         if (CartFacade::remove($id)) {
-            return redirect()->back()->with('success', 'Item added to cart!');
+            return redirect()->back()->with('success', 'Item remove from cart!');
         }
         return redirect()->route('student.cart.index')->with('error', 'Item not found in cart!');
     }

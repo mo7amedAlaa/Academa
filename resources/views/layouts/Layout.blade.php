@@ -5,8 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Academa')</title>
-    <link rel="icon" href="{{ asset('public/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset($settings['site_logo'] ?? 'logos/default-logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Include Toastify CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js@1.11.2/src/toastify.min.css">
+
 
     @vite('resources/css/app.css')
 </head>
@@ -17,7 +20,8 @@
         @yield('content')
     </main>
     @include('partials.Footer')
-    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <!-- Include Toastify JS -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js@1.11.2/src/toastify.min.js"></script>
     <script>
 
         // Enable pusher logging - don't include this in production

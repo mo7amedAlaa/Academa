@@ -4,6 +4,31 @@
 
 @section('content')
 <div class="container mx-auto my-10 px-6">
+    @if(session('error'))
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            Toastify({
+                text: "{{ session('error') }}",
+                backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+                close: true,
+                duration: 3000
+            }).showToast();
+        });
+    </script>
+    @endif
+
+    @if(session('success'))
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            Toastify({
+                text: "{{ session('success') }}",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                close: true,
+                duration: 3000
+            }).showToast();
+        });
+    </script>
+    @endif
     <h1 class="text-4xl font-extrabold text-indigo-700 mb-6">{{ $course->title }}</h1>
     <div class="flex flex-wrap md:flex-nowrap gap-8">
 
@@ -31,6 +56,9 @@
                     <li>Duration: {{ $course->duration_hours }} hours</li>
                     <li>Level: {{ $course->level->name }}</li>
                     <li>Category: {{ $course->category->name }}</li>
+                    @if($course->isFree)
+                    <li>Price: <span class="text-lg font-semibold text-green-600">This course is free!</span></li>
+                    @else
                     <li>
                         <span>Price:</span>
                         @if($course->discount > 0)
@@ -46,6 +74,7 @@
                         </span>
                         @endif
                     </li>
+                    @endif
 
                 </ul>
             </div>
@@ -143,7 +172,20 @@
             @if(auth()->user()->hasRole('student'))
             <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
                 <h3 class="text-2xl font-semibold text-indigo-600 mb-4">Enroll Now</h3>
-                <p class="text-lg text-gray-700 mb-4">Price: @if($course->discount > 0)
+                @if($course->isFree)
+                <p class="text-lg   mb-4 font-semibold text-green-600">This course is free!</p>
+                <form action="{{ route('learning.add') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="course_id" value="{{ $course->id }}">
+                    <button type="submit"
+                        class="bg-indigo-500 hover:bg-indigo-600 text-white py-3 px-6 rounded-lg text-lg font-semibold capitalize w-full">
+                        Add to My Learning
+                    </button>
+                </form>
+                @else
+                <p class="text-lg text-gray-700 mb-4">
+                    Price:
+                    @if($course->discount > 0)
                     <span class="text-lg font-semibold text-red-500 line-through mr-2">
                         ${{ number_format($course->price, 2) }}
                     </span>
@@ -151,7 +193,7 @@
                         ${{ number_format($course->price - ($course->price * $course->discount) / 100, 2) }}
                     </span>
                     @else
-                    <span class="  font-semibold text-lg ">
+                    <span class="font-semibold text-lg">
                         ${{ number_format($course->price, 2) }}
                     </span>
                     @endif
@@ -161,14 +203,14 @@
                     <input type="hidden" name="id" value="{{ $course->id }}">
                     <input type="hidden" name="name" value="{{ $course->title }}">
                     <input type="hidden" name="price"
-                        value="{{  $course->price - ($course->price * $course->discount) / 100 }}">
-                    <input type="hidden" name="cover_image" value="{{$course->cover_image}}">
+                        value="{{ $course->price - ($course->price * $course->discount) / 100 }}">
+                    <input type="hidden" name="cover_image" value="{{ $course->cover_image }}">
                     <button type="submit"
-                        class="bg-indigo-500 hover:bg-indigo-600 text-white py-3 px-6 rounded-lg text-lg font-semibold capitalize w-full">add
-                        to cart
+                        class="bg-indigo-500 hover:bg-indigo-600 text-white py-3 px-6 rounded-lg text-lg font-semibold capitalize w-full">
+                        Add to Cart
                     </button>
                 </form>
-
+                @endif
             </div>
             @endif
             @endauth
@@ -177,12 +219,20 @@
                 <h3 class="text-2xl font-semibold text-indigo-600 mb-4">Related Courses</h3>
                 @foreach ($relatedCourses as $relatedCourse)
                 <div class="flex items-center mb-4">
-                    <img src="{{ asset( $relatedCourse->cover_image) }}" alt="{{ $relatedCourse->title }}"
+                    <img src="{{ asset($relatedCourse->cover_image) }}" alt="{{ $relatedCourse->title }}"
                         class="w-16 h-16 rounded-lg mr-4 object-cover">
                     <div>
-                        <h4 class="text-lg font-semibold"><a href="{{ route('courses.show', $relatedCourse->id) }}"
-                                class="text-indigo-600 hover:underline">{{ $relatedCourse->title }}</a></h4>
+                        <h4 class="text-lg font-semibold">
+                            <a href="{{ route('courses.show', $relatedCourse->id) }}"
+                                class="text-indigo-600 hover:underline">
+                                {{ $relatedCourse->title }}
+                            </a>
+                        </h4>
+                        @if($relatedCourse->isFree)
+                        <p class="text-lg   mb-4 font-semibold text-green-600">This course is free!</p>
+                        @else
                         <p class="text-gray-600 text-sm">Price: ${{ $relatedCourse->price }}</p>
+                        @endif
                     </div>
                 </div>
                 @endforeach

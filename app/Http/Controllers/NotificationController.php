@@ -34,6 +34,10 @@ class NotificationController extends Controller
 
             return redirect()->route('courses.content', ['course_id' => $notification->data['course_id']]);
         }
+        if ($notification->type === 'App\Notifications\NewCourseEnrolled') {
+
+            return redirect()->route('my-learning');
+        }
 
 
         return redirect()->route('welcome')->with('error', 'Notification data is invalid.');
@@ -42,9 +46,16 @@ class NotificationController extends Controller
     {
         $user = auth()->user();
 
-        // Mark all notifications as read or delete them
         $user->notifications()->delete();
 
         return back()->with('success', 'All notifications have been cleared.');
+    }
+    public function delete($id)
+    {
+        $user = auth()->user();
+        $notification = $user->notifications()->findOrFail($id);
+        $notification->delete();
+
+        return redirect()->back()->with('success', 'Notification deleted!');
     }
 }

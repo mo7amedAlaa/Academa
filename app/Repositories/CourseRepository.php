@@ -45,7 +45,7 @@ class CourseRepository
 
     public function getAllCourses()
     {
-        return $this->course->all();
+        return $this->course->where('status', 'published')->get();
     }
 
     public function getCourseDetails($id)
@@ -57,6 +57,7 @@ class CourseRepository
         $currentCourse = Course::findOrFail($id);
         return Course::where('category_id', $currentCourse->category_id)
             ->where('id', '!=', $id)
+            ->where('status', 'published')
             ->take(4)
             ->get();
     }
@@ -88,36 +89,49 @@ class CourseRepository
 
     public function searchCourses($searchTerm)
     {
-        return $this->course->where('name', 'like', "%{$searchTerm}%")
-            ->orWhere('description', 'like', "%{$searchTerm}%")
-            ->get();
+        return
+            $this->course->where('status', 'published')
+            ->where(function ($query) use ($searchTerm) {
+                $query->where('title', 'like', "%{$searchTerm}%")
+                    ->orWhere('description', 'like', "%{$searchTerm}%");
+            })->get();
     }
 
-    public function getTopRatedCourses($limit = 5)
+    public function getTopRatedCourses($limit = 10)
     {
-        return $this->course->withAvg('reviews', 'rating')
+        return
+            $this->course->where('status', 'published')
+            ->withAvg('reviews', 'rating')
             ->orderByDesc('reviews_avg_rating')
             ->limit($limit)
             ->get();
     }
 
-    public function getPopularCourses($limit = 5)
+    public function getPopularCourses($limit = 10)
     {
         return $this->course->withCount('students')
+            ->where('status', 'published')
             ->orderBy('students_count', 'desc')
             ->limit($limit)
             ->get();
     }
 
-    public function getRecentlyAddedCourses($limit = 5)
+
+    public function getRecentlyAddedCourses($limit = 10)
     {
-        return $this->course->orderBy('created_at', 'desc')->limit($limit)->get();
+        return
+            $this->course->where('status', 'published')
+            ->orderBy('created_at', 'desc')
+            ->limit($limit)
+            ->get();
     }
 
 
     public function getCoursesByCategory($categoryId)
     {
-        return $this->course->where('category_id', $categoryId)->get();
+        return $this->course->where('category_id', $categoryId)
+            ->where('status', 'published')
+            ->get();
     }
 
     public function getCourseByInstructor($instructorId)

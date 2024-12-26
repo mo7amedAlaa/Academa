@@ -10,8 +10,15 @@ class Payment extends Model
     use HasFactory;
 
     //
-    protected $fillable = ['student_id', 'course_id', 'amount', 'status'];
-
+    protected $fillable = [
+        'user_id',
+        'payment_id',
+        'amount',
+        'payment_method',
+        'status',
+        'created_at',
+        'updated_at',
+    ];
     public function student()
     {
         return $this->belongsTo(Student::class);

@@ -2,6 +2,31 @@
 @section('title', 'Academa | Shopping Cart')
 @section('content')
 <div class="container mx-auto  py-12 px-2 md:px-4 min-h-screen">
+    @if(session('error'))
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            Toastify({
+                text: "{{ session('error') }}",
+                backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+                close: true,
+                duration: 3000
+            }).showToast();
+        });
+    </script>
+    @endif
+
+    @if(session('success'))
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            Toastify({
+                text: "{{ session('success') }}",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                close: true,
+                duration: 3000
+            }).showToast();
+        });
+    </script>
+    @endif
     <h1 class="text-4xl font-semibold mb-6 text-indigo-700">Shopping Cart</h1>
     <p class="text-lg mb-8 text-gray-700">Courses you have added to your Cart!</p>
     @if(session('success'))

@@ -1,12 +1,11 @@
-<header class="bg-white shadow-md py-4">
+<header class="bg-white hidden md:block   shadow-md py-4">
     <div class="mx-auto flex items-center justify-between px-4">
         <div class="flex items-center space-x-4 w-12 h-12 rounded-full">
             <a href="{{ route('welcome') }}" class="w-full h-full rounded-full">
-                <img src="{{ asset('logo.webp') }}" alt="Logo"
-                    class="text-2xl w-full h-full rounded-full font-bold text-blue-600">
+                <img src="{{ asset($settings['site_logo'] ?? 'logos/default-logo.png') }}" alt="Logo"
+                    class="w-full h-full rounded-full font-bold text-blue-600">
             </a>
         </div>
-
 
         <div class="relative mx-5 z-50">
             <button id="categories-button" class="text-gray-600 hover:text-blue-600 flex items-center space-x-2"
@@ -18,13 +17,12 @@
                 </svg>
             </button>
 
-
             <ul id="categories-menu"
                 class="absolute left-0 hidden bg-white border border-gray-200 rounded-lg shadow-lg mt-2 w-64">
                 @foreach ($categories as $category)
                 @if (is_null($category->parent_id))
                 <li class="relative">
-                    <button class="  px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center justify-between"
+                    <button class="block px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center justify-between"
                         onclick="toggleSubcategories({{ $category->id }})">
                         <span>{{ $category->name }}</span>
                         @if ($category->subcategories->count() > 0)
@@ -140,8 +138,6 @@
         </div>
 
         <nav class="flex items-center space-x-4">
-
-
             <ul class="flex space-x-6 items-center">
                 @auth
                 @if(auth()->user()->hasRole('student'))
@@ -160,36 +156,36 @@
                     class="text-gray-600 hover:text-blue-600 font-medium border-2 px-4 py-2 rounded-lg block">Register</a>
                 @endauth
             </ul>
-
-    </div>
+        </nav>
     </div>
 </header>
 
 <script>
-    // Toggle subcategory visibility (Level 1)
-    function toggleSubcategories(categoryId) {
-        const subcategoryMenu = document.getElementById('subcategory-' + categoryId);
-        subcategoryMenu.classList.toggle('hidden');
-    }
-
-
-    function toggleSubSubcategories(subcategoryId) {
-        const subSubcategoryMenu = document.getElementById('subsubcategory-' + subcategoryId);
-        subSubcategoryMenu.classList.toggle('hidden');
-    }
-
-
+    // Toggle categories dropdown in desktop header
     document.getElementById('categories-button').addEventListener('click', function (event) {
         event.stopPropagation();
         const categoriesMenu = document.getElementById('categories-menu');
         categoriesMenu.classList.toggle('hidden');
     });
 
-
+    // Hide categories dropdown when clicking outside of it
     document.addEventListener('click', function (event) {
         const categoriesMenu = document.getElementById('categories-menu');
         if (!categoriesMenu.contains(event.target) && !event.target.matches('#categories-button')) {
             categoriesMenu.classList.add('hidden');
         }
     });
+
+    // Toggle subcategories in desktop header
+    function toggleSubcategories(categoryId) {
+        const subcategoryMenu = document.getElementById('subcategory-' + categoryId);
+        subcategoryMenu.classList.toggle('hidden');
+    }
+
+    // Toggle sub-subcategories in desktop header
+    function toggleSubSubcategories(subcategoryId) {
+        const subSubcategoryMenu = document.getElementById('subsubcategory-' + subcategoryId);
+        subSubcategoryMenu.classList.toggle('hidden');
+    }
+
 </script>

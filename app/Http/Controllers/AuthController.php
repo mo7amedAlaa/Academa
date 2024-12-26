@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Dto\AuthDto;
-use App\Events\newNotification;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\Category;
 use App\Models\Course;
 use App\Models\Instructor;
+use App\Models\Payment;
+use App\Models\User;
 use App\Services\Facades\AuthFacade;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Request;
 
 class AuthController extends Controller
 {
+
     public function login()
     {
         return view('auth.login');
@@ -48,6 +50,11 @@ class AuthController extends Controller
     public function authenticate(LoginRequest $request)
     {
         $user = AuthFacade::login(AuthDto::authenticate($request));
+
+        if ($user && $user->remember_token) {
+            $request->cookie('remember_me', $user->remember_token, 60 * 24 * 30);
+        }
+
         if ($user) {
             $user = Auth::user();
 
@@ -58,8 +65,10 @@ class AuthController extends Controller
             } elseif ($user->hasRole('student')) {
                 return redirect()->route('student.dashboard');
             }
+
             return redirect()->route('welcome');
         }
+
         return redirect()->back()->withErrors(['email' => 'Invalid email or password']);
     }
 
@@ -75,11 +84,17 @@ class AuthController extends Controller
         return view('welcome');
     }
 
-    // Additional methods to show dashboards for roles
     public function adminDashboard()
     {
-        $this->authorizeRole('admin');
-        return view('admin.dashboard');
+        $totalUsers = User::count();
+        $bannedUsers = Instructor::where('is_active', 0)->count();
+        $totalPayments = Payment::sum('amount');
+        $payments = Payment::all();
+        $totalCourses = Course::count();
+        $users = User::all();
+        $courses = Course::with('instructor', 'category')->get();
+
+        return view('admin.dashboard', compact('totalUsers', 'bannedUsers', 'totalPayments', 'totalCourses', 'users', 'courses', 'payments'));
     }
 
     public function instructorDashboard(Request $request)

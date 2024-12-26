@@ -74,27 +74,41 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
         View::composer('*', function ($view) {
-            $topRatedCourses = CourseFacade::getTopRatedCourses(20);
-            $recentlyAddedCourses = CourseFacade::getRecentlyAddedCourses(20);
-            $popularCourses = CourseFacade::getPopularCourses(5);
-            $user = auth()->user();
+            $settingsPath = storage_path('app/settings.json');
+            $settings = json_decode(file_get_contents($settingsPath), true);
 
+            $user = auth()->user();
             $view->with([
                 'user' => $user,
                 'categories' => app('categoryService')->getAllCategories_sub(),
-                'topRatedCourses' => $topRatedCourses,
-                'getRecentlyAddedCourses' => $recentlyAddedCourses,
-                'popularCourses' => $popularCourses,
 
+                'settings' => $settings,
+
+            ]);
+        });
+        View::composer('welcome', function ($view) {
+            $view->with([
+                'topRatedCourses' => CourseFacade::getTopRatedCourses(5),
+                'recentlyAddedCourses' => CourseFacade::getRecentlyAddedCourses(5),
+                'popularCourses' => CourseFacade::getPopularCourses(5),
+            ]);
+        });
+
+        View::composer('student.dashboard', function ($view) {
+            $view->with([
+                'topRatedCourses' => CourseFacade::getTopRatedCourses(5),
+                'recentlyAddedCourses' => CourseFacade::getRecentlyAddedCourses(5),
+                'popularCourses' => CourseFacade::getPopularCourses(5),
             ]);
         });
 
         View::composer('partials.Header', function ($view) {
+
             $id = auth()->id();
             $cart = session()->get("cart.$id", []);
             $productCount = count($cart);
+
             $view->with([
                 'productCount' => $productCount
             ]);

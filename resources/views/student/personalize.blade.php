@@ -2,7 +2,31 @@
 @section('title','Personalize')
 
 @section('content')
+@if(session('error'))
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        Toastify({
+            text: "{{ session('error') }}",
+            backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+            close: true,
+            duration: 3000
+        }).showToast();
+    });
+</script>
+@endif
 
+@if(session('success'))
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        Toastify({
+            text: "{{ session('success') }}",
+            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+            close: true,
+            duration: 3000
+        }).showToast();
+    });
+</script>
+@endif
 <div class=" py-12 px-2 md:px-4 min-h-screen  flex items-center justify-center bg-gray-100">
     <div class=" w-3/4 bg-white shadow-md rounded-lg p-6 ">
         <h1 class="text-lg font-semibold mb-4">What field are you learning for?</h1>
@@ -21,10 +45,7 @@
                 @endif
                 @endforeach
                 @endif
-                <label class="flex items-center space-x-2">
-                    <input type="radio" name="interests_field" value="none" class="form-radio text-blue-600">
-                    <span>None of the above</span>
-                </label>
+
             </div>
 
             <h2 class="text-lg font-semibold mt-6 mb-4">Do you currently manage people?</h2>

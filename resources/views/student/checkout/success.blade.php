@@ -9,8 +9,10 @@
 
 
     <div class="text-center">
-        <a href="{{ route('welcome') }}" class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600">Return to
-            Home</a>
+
+        <a href="{{route('my-learning')}}" class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"> Check Your
+            Learning</a>
+
     </div>
 
 </div>

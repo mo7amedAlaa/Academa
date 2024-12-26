@@ -1,9 +1,33 @@
 @extends('layouts.Layout')
 
-@section('title', 'academa | Home')
+@section('title', $settings['site_name'] . ' | student')
 
 @section('content')
+@if(session('error'))
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        Toastify({
+            text: "{{ session('error') }}",
+            backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+            close: true,
+            duration: 3000
+        }).showToast();
+    });
+</script>
+@endif
 
+@if(session('success'))
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        Toastify({
+            text: "{{ session('success') }}",
+            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+            close: true,
+            duration: 3000
+        }).showToast();
+    });
+</script>
+@endif
 <div class="flex flex-col">
     @auth
     <div class="flex items-center bg-gradient-to-r from-indigo-500 to-indigo-700 p-8 rounded-lg shadow-xl mb-8 w-full">
@@ -21,16 +45,14 @@
     </div>
     @endauth
 
-    <!-- Slider Section -->
     @include('partials.slider', ['images' => ['slider1.jpg', 'slider2.jpg', 'slider3.jpg']])
 
-    <!-- Course Sections -->
     <div class="my-12 px-6">
         @foreach ([
         ['title' => 'Top Rated Courses', 'description' => 'These courses are highly rated by students like you!',
         'courses' => $topRatedCourses],
         ['title' => 'Recently Added Courses', 'description' => 'Check out our newest courses, freshly added for you.',
-        'courses' => $getRecentlyAddedCourses],
+        'courses' => $recentlyAddedCourses],
         ['title' => 'Popular Courses', 'description' => 'Check out our popular courses, freshly updated for you.',
         'courses' => $popularCourses],
         ] as $section)
@@ -41,7 +63,6 @@
     @if($user->student->interests_field)
 
 
-    <!-- Courses Section -->
     <div class="my-12 px-6">
         <h1 class="text-4xl font-semibold mb-6 text-indigo-700">Top Courses Based on Your Interest: "<span
                 class="text-green-500">

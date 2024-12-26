@@ -66,7 +66,8 @@ class AuthRepository
             'password' => $authDto->password,
         ];
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $authDto->remember)) {
+
             return Auth::user();
         }
 

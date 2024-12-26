@@ -6,6 +6,31 @@
 
 
 <div class="flex justify-center items-center min-h-screen">
+    @if(session('error'))
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            Toastify({
+                text: "{{ session('error') }}",
+                backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+                close: true,
+                duration: 3000
+            }).showToast();
+        });
+    </script>
+    @endif
+
+    @if(session('success'))
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            Toastify({
+                text: "{{ session('success') }}",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                close: true,
+                duration: 3000
+            }).showToast();
+        });
+    </script>
+    @endif
     <div class="hidden lg:block p-8 w-full ">
         <img src="{{ asset('images/reg.webp') }}" alt="Academa Logo" class="  w-full h-full ">
     </div>
@@ -15,7 +40,6 @@
         <form method="POST" action="{{ route('login') }}">
             @csrf
             @method('POST')
-            <!-- Email Input -->
             <div class="mb-4">
                 <label for="email" class="block text-gray-700">Email</label>
                 <input type="email" name="email" id="email"
@@ -26,7 +50,6 @@
                 @enderror
             </div>
 
-            <!-- Password Input -->
             <div class="mb-4">
                 <label for="password" class="block text-gray-700">Password</label>
                 <input type="password" name="password" id="password"
@@ -36,10 +59,15 @@
                 @enderror
             </div>
 
-            <!-- Remember Me Checkbox -->
-            <div class="mb-4 flex items-center">
-                <input type="checkbox" name="remember" id="remember" class="form-checkbox text-blue-500">
-                <label for="remember" class="ml-2 text-gray-700">Remember me</label>
+            <div class="mb-4 flex items-center justify-between">
+                <div>
+                    <input type="checkbox" name="remember" id="remember" class="form-checkbox text-blue-500">
+                    <label for="remember" class="ml-2 text-gray-700">Remember me</label>
+                </div>
+                <div><a href="{{route('password.request')}}" class="text-blue-500 hover:underline cursor-pointer ">Rest
+                        Password ?</a>
+                </div>
+
             </div>
 
             <div class="mt-6">
@@ -50,7 +78,8 @@
         </form>
 
         <div class="mt-4 text-center">
-            <a href="{{ route('register') }}" class="text-blue-500 hover:underline">Don't have an account? Register</a>
+            <a href="{{ route('register') }}" class="text-blue-500 hover:underline cursor-pointer">Don't have an
+                account? Register</a>
         </div>
     </div>
 </div>

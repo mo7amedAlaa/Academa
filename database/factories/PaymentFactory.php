@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Course;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,11 +20,16 @@ class PaymentFactory extends Factory
     public function definition(): array
     {
         return [
-            'student_id' => Student::inRandomOrder()->first()?->id ?? Student::factory()->create()->id,
-            'course_id' => Course::inRandomOrder()->first()?->id ?? Course::factory()->create()->id,
-            'amount' => $this->faker->randomFloat(2, 10, 500),
-            'status' => $this->faker->randomElement(['pending', 'completed', 'failed']),
-            'created_at' => now(),
+            'user_id' =>
+            User::inRandomOrder()->first()->id,
+            'payment_id' =>
+            $this->faker->uuid,
+            'amount' =>
+            $this->faker->randomFloat(2, 50, 500),
+            'payment_method' =>
+            $this->faker->randomElement(['credit_card', 'paypal', 'bank_transfer']),
+            'status' =>  $this->faker->randomElement(['completed', 'pending', 'failed']),
+            'created_at' =>  $this->faker->dateTimeThisYear,
             'updated_at' => now(),
         ];
     }

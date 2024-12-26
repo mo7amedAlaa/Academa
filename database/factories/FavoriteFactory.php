@@ -23,8 +23,8 @@ class FavoriteFactory extends Factory
     public function definition()
     {
         return [
-            'student_id' => Student::inRandomOrder()->first()->id ?? Student::factory(), // Random existing or new
-            'course_id' => Course::inRandomOrder()->first()->id ?? Course::factory(),   // Random existing or new
+            'student_id' => Student::inRandomOrder()->first()->id ?? Student::factory(),
+            'course_id' => Course::inRandomOrder()->first()->id ?? Course::factory(),
             'created_at' => now(),
             'updated_at' => now(),
         ];

@@ -1,10 +1,34 @@
 @extends('layouts.welcomeLayout')
 
-@section('title', 'Academa | Welcome')
+@section('title', $settings['site_name'] . ' | Welcome')
 
 @section('content')
-<div class="flex flex-col">
+<div class="flex flex-col ">
+    @if(session('error'))
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            Toastify({
+                text: "{{ session('error') }}",
+                backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+                close: true,
+                duration: 3000
+            }).showToast();
+        });
+    </script>
+    @endif
 
+    @if(session('success'))
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            Toastify({
+                text: "{{ session('success') }}",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                close: true,
+                duration: 3000
+            }).showToast();
+        });
+    </script>
+    @endif
     @auth
     <div class="flex items-center bg-gradient-to-r from-indigo-500 to-indigo-700 p-8 rounded-lg shadow-xl mb-8 w-full">
         <i class="fas fa-user-circle text-6xl text-white mr-6"></i>
@@ -57,7 +81,7 @@
         ['title' => 'Top Rated Courses', 'description' => 'These courses are highly rated by students like you!',
         'courses' => $topRatedCourses],
         ['title' => 'Recently Added Courses', 'description' => 'Check out our newest courses, freshly added for you.',
-        'courses' => $getRecentlyAddedCourses],
+        'courses' => $recentlyAddedCourses],
         ['title' => 'Popular Courses', 'description' => 'Check out our popular courses, freshly updated for you.',
         'courses' => $popularCourses],
         ] as $section)

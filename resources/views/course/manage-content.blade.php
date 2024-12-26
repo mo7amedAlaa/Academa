@@ -79,6 +79,10 @@
                             Delete
                         </button>
                     </form>
+                    @if($lesson->content_type === 'quiz')
+                    <a href="{{ route('quiz.create', $lesson) }}" class="text-green-500 hover:underline ml-2">Form
+                        Quiz</a>
+                    @endif
                 </td>
             </tr>
             @endforeach

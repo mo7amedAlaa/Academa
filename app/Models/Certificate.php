@@ -10,7 +10,7 @@ class Certificate extends Model
     //
     use HasFactory;
 
-    protected $fillable = ['student_id', 'course_id'];
+    protected $fillable = ['student_id', 'course_id', 'qr_code_path'];
 
     public function student()
     {

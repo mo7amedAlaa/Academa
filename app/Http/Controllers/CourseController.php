@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Certificate;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Dto\CourseDto;
 use App\Models\Course;
 use App\Models\CourseLevel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
@@ -148,5 +151,44 @@ class CourseController extends Controller
 
 
         return view('course.manage-content', compact('course', 'lessons'));
+    }
+    public function generateCertificate(Course $course)
+    {
+        $user = auth()->user();
+        $enrollment = $user->student->courses()->withPivot('progress_percentage', 'expired_date')
+            ->where('courses.id', $course->id)
+            ->first();
+
+        if ($enrollment && $enrollment->pivot->progress_percentage == 100) {
+            // Generate QR code (could be any URL, like a verification page for the certificate)
+            $qrData = route('certificate.verify', ['course' => $course->id, 'user' => $user->id]);
+
+            // Generate and store the QR code in the public directory
+            $qrCodePath = public_path('qr_codes');
+            if (!is_dir($qrCodePath)) {
+                mkdir($qrCodePath, 0755, true);
+            }
+            $fileName = 'certificate_qr_' . $course->id . '_' . $user->id . '.png';
+            $qrFilePath = $qrCodePath . '/' . $fileName;
+
+            QrCode::format('png')->size(200)->generate($qrData, $qrFilePath);
+
+            $certificate = Certificate::create([
+                'student_id' => $user->student->id,
+                'course_id' => $course->id,
+                'qr_code_path' => 'qr_codes/' . $fileName,
+            ]);
+
+            $pdf = Pdf::loadView('certificates.certificate', [
+                'user' => $user,
+                'certificate' => $certificate,
+                'course' => $course,
+                'qrCodePath' => 'qr_codes/' . $fileName,
+            ]);
+
+            return $pdf->download('certificate_' . $course->id . '.pdf');
+        }
+
+        return redirect()->back()->with('error', 'You must complete the course before generating a certificate.');
     }
 }
