@@ -38,18 +38,18 @@ Route::get('password/reset', [PasswordResetController::class, 'showLinkRequestFo
 Route::post('password/email', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('password/reset/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/update', [PasswordResetController::class, 'reset'])->name('password.update');
+Route::get('/email/verify', [VerificationController::class, 'notice'])->name('verification.notice');
+Route::get('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 
 // Authenticated Routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
-    Route::get('/email/verify', [VerificationController::class, 'notice'])->name('verification.notice');
 
-    Route::get('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
     Route::get('/settings', [AccountController::class, 'edit'])->name('settings');
     Route::middleware('verified')->put('/settings', [AccountController::class, 'update'])->name('account.update');
     Route::delete('/settings/delete', [AccountController::class, 'delete'])->name('account.delete');
@@ -63,7 +63,6 @@ Route::middleware('auth')->group(function () {
     })->name('banned.page');
 
     Route::get('/contact-support', [SupportController::class, 'index'])->name('support.contact');
-    // Route for submitting the contact form
     Route::post('/contact-support', [SupportController::class, 'submit'])->name('support.submit');
 
     Route::prefix('student')->middleware('role:student')->group(function () {

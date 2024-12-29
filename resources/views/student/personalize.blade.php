@@ -27,13 +27,13 @@
     });
 </script>
 @endif
-<div class=" py-12 px-2 md:px-4 min-h-screen  flex items-center justify-center bg-gray-100">
-    <div class=" w-3/4 bg-white shadow-md rounded-lg p-6 ">
+<div class=" md:py-12 px-1 md:px-4 min-h-screen  flex items-center justify-center bg-gray-100">
+    <div class="w-full  md:w-3/4 bg-white shadow-md rounded-lg p-6 ">
         <h1 class="text-lg font-semibold mb-4">What field are you learning for?</h1>
         <form action="" method="post">
             @csrf
             @method ('POST')
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @if($categories)
                 @foreach($categories as $category)
                 @if(!$category->parent_id)

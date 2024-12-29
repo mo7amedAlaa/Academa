@@ -1,45 +1,56 @@
 @extends('layouts.admin_layout')
 
 @section('content')
-<div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6">Payment Analysis</h1>
+<div class="container mx-auto p-6 max-w-screen-xl">
+
+    <h1 class="text-3xl font-bold mb-6 text-gray-800">Payment Analysis</h1>
 
     @if(session('success'))
-    <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
+    <div class="mb-4 p-4 bg-green-100 text-green-700 rounded shadow-md">
         {{ session('success') }}
     </div>
     @endif
-    <div class="mb-4">
+
+    <!-- Filter Form -->
+    <div class="mb-6">
         <form action="{{ route('admin.payment-analysis') }}" method="GET">
-            <div class="flex space-x-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div>
                     <label for="start_date" class="block text-gray-700">Start Date</label>
                     <input type="date" id="start_date" name="start_date"
-                        class="mt-1 p-2 w-full border border-gray-300 rounded">
+                        class="mt-1 p-2 w-full border border-gray-300 rounded focus:ring focus:ring-blue-200 focus:outline-none">
                 </div>
                 <div>
                     <label for="end_date" class="block text-gray-700">End Date</label>
                     <input type="date" id="end_date" name="end_date"
-                        class="mt-1 p-2 w-full border border-gray-300 rounded">
+                        class="mt-1 p-2 w-full border border-gray-300 rounded focus:ring focus:ring-blue-200 focus:outline-none">
                 </div>
-                <div>
+                <div class="flex items-center justify-end">
                     <button type="submit"
-                        class="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Filter</button>
+                        class="mt-6 px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none transition duration-300 transform hover:scale-105">
+                        Filter
+                    </button>
                 </div>
             </div>
         </form>
     </div>
-    <div class="mb-4 flex justify-end">
+
+    <!-- Delete History Form -->
+    <div class="mb-6 flex justify-end">
         <form action="{{ route('admin.delete-payment-history') }}" method="POST"
             onsubmit="return confirm('Are you sure you want to delete all payment history?');">
             @csrf
-            <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete All
-                History</button>
+            <button type="submit"
+                class="px-6 py-3 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none transition duration-300 transform hover:scale-105">
+                Delete All History
+            </button>
         </form>
     </div>
-    <table class="min-w-full bg-white border border-gray-300 rounded-lg">
+
+    <!-- Payment Table -->
+    <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
         <thead>
-            <tr>
+            <tr class="bg-gray-100">
                 <th class="border-b border-gray-300 text-left px-4 py-2">ID</th>
                 <th class="border-b border-gray-300 text-left px-4 py-2">Amount</th>
                 <th class="border-b border-gray-300 text-left px-4 py-2">Payment Method</th>
@@ -49,7 +60,7 @@
         </thead>
         <tbody>
             @foreach($payments as $payment)
-            <tr>
+            <tr class="hover:bg-gray-50 transition duration-300">
                 <td class="border-b border-gray-300 px-4 py-2">{{ $payment->id }}</td>
                 <td class="border-b border-gray-300 px-4 py-2">{{ $payment->amount }}</td>
                 <td class="border-b border-gray-300 px-4 py-2">{{ $payment->payment_method }}</td>
@@ -60,8 +71,10 @@
         </tbody>
     </table>
 
+    <!-- Pagination -->
     <div class="mt-6">
         {{ $payments->links() }}
     </div>
+
 </div>
 @endsection

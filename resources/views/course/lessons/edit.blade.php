@@ -4,31 +4,36 @@
 
 @section('content')
 <div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6">Edit Lesson: {{ $lesson->title }}</h1>
+    <h1 class="text-3xl font-bold mb-6 flex items-center">
+        <i class="fas fa-edit mr-2"></i> Edit Lesson: {{ $lesson->title }}
+    </h1>
 
-    <form action="{{ route('lessons.update', $lesson->id) }}" method="POST" enctype="multipart/form-data"
-        class="space-y-4">
+    <form action="{{ route('lessons.update', $lesson->id) }}" id="lesson-Form" method="POST"
+        enctype="multipart/form-data" class="space-y-6 sm:space-y-8">
         @csrf
         @method('PUT')
 
         <div>
-            <label for="course_id" class="block text-sm font-medium text-gray-700">Course ID <span
-                    class="text-red-500">(*)</span></label>
+            <label for="course_id" class="block text-sm font-medium text-gray-700 flex items-center">
+                <i class="fas fa-cogs mr-2"></i> Course ID <span class="text-red-500">(*)</span>
+            </label>
             <input type="text" name="course_id" id="course_id" value="{{ old('course_id', $lesson->course_id) }}"
-                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" readonly>
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100" readonly>
         </div>
 
         <div>
-            <label for="instructor_id" class="block text-sm font-medium text-gray-700">Instructor ID <span
-                    class="text-red-500">(*)</span></label>
+            <label for="instructor_id" class="block text-sm font-medium text-gray-700 flex items-center">
+                <i class="fas fa-user-tie mr-2"></i> Instructor ID <span class="text-red-500">(*)</span>
+            </label>
             <input type="text" name="instructor_id" id="instructor_id"
                 value="{{ old('instructor_id', $lesson->instructor_id) }}"
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" hidden>
         </div>
 
         <div>
-            <label for="title" class="block text-sm font-medium text-gray-700">Lesson Title <span
-                    class="text-red-500">(*)</span> </label>
+            <label for="title" class="block text-sm font-medium text-gray-700 flex items-center">
+                <i class="fas fa-heading mr-2"></i> Lesson Title <span class="text-red-500">(*)</span>
+            </label>
             <input type="text" name="title" id="title" value="{{ old('title', $lesson->title) }}"
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
             @error('title')
@@ -37,8 +42,9 @@
         </div>
 
         <div>
-            <label for="content_type" class="block text-sm font-medium text-gray-700">Content Type <span
-                    class="text-red-500">*</span></label>
+            <label for="content_type" class="block text-sm font-medium text-gray-700 flex items-center">
+                <i class="fas fa-file-alt mr-2"></i> Content Type <span class="text-red-500">*</span>
+            </label>
             <select name="content_type" id="content_type"
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                 <option value="" disabled {{ old('content_type') ? '' : 'selected' }}>Select content type</option>
@@ -62,19 +68,19 @@
             class="hidden bg-blue-100 p-4 rounded-lg shadow-md transform transition-all duration-300 ease-in-out">
             <p class="text-sm text-gray-700 font-semibold">
                 <span class="text-blue-600">Note:</span> To create a quiz, first create a lesson of type "quiz" and then
-                you can
-                form quizzes in the main Dashboard.
+                you can form quizzes in the main Dashboard.
             </p>
         </div>
 
         <div id="media-container" style="display: none;">
-            <label for="media" class="block text-sm font-medium text-gray-700">Upload Media</label>
+            <label for="media" class="block text-sm font-medium text-gray-700 flex items-center">
+                <i class="fas fa-upload mr-2"></i> Upload Media
+            </label>
             <input type="file" name="media" id="media" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
             @error('media')
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
 
-            <!-- Show the existing media (if any) -->
             @if($lesson->media)
             <div class="mt-4">
                 <p class="text-sm text-gray-700">Current Media:</p>
@@ -92,7 +98,9 @@
         </div>
 
         <div id="link-container" style="display: none;">
-            <label for="link" class="block text-sm font-medium text-gray-700">External Link</label>
+            <label for="link" class="block text-sm font-medium text-gray-700 flex items-center">
+                <i class="fas fa-link mr-2"></i> External Link
+            </label>
             <input type="url" name="link" id="link" value="{{ old('link', $lesson->link) }}"
                 placeholder="Enter external link (if applicable)"
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
@@ -100,7 +108,6 @@
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
 
-            <!-- Show the existing link (if any) -->
             @if($lesson->link)
             <div class="mt-2">
                 <p class="text-sm text-gray-700">Current Link:</p>
@@ -110,7 +117,9 @@
         </div>
 
         <div>
-            <label for="position" class="block text-sm font-medium text-gray-700">Position</label>
+            <label for="position" class="block text-sm font-medium text-gray-700 flex items-center">
+                <i class="fas fa-sort-numeric-up-alt mr-2"></i> Position
+            </label>
             <input type="number" name="position" id="position" value="{{ old('position', $lesson->position) }}"
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
             @error('position')
@@ -125,14 +134,18 @@
         </div>
 
         <div>
-            <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
+            <label for="notes" class="block text-sm font-medium text-gray-700 flex items-center">
+                <i class="fas fa-sticky-note mr-2"></i> Notes
+            </label>
             <textarea name="notes" id="notes" rows="3"
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">{{ old('notes', $lesson->notes) }}</textarea>
         </div>
 
         <div>
-            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
-                Update Lesson
+            <button type="submit" id="submitBtn"
+                class="bg-blue-500  hover:bg-blue-600 w-full text-white py-2 px-4 rounded flex items-center justify-center space-x-2">
+                <i class="fas fa-save"></i>
+                <span>Update Lesson</span>
             </button>
         </div>
     </form>
@@ -167,5 +180,11 @@
     contentTypeSelect.addEventListener('change', handleContentTypeChange);
 
     handleContentTypeChange();
+    document.getElementById('lesson-Form').addEventListener('submit', function (event) {
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+    });
 </script>
 @endsection

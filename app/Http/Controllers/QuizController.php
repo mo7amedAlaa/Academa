@@ -77,38 +77,62 @@ class QuizController extends Controller
         $quiz->title = $request->title;
         $quiz->save();
 
+        // Track the IDs of the questions that were removed
+        $updatedQuestionIds = [];
+
+        // Process each question in the request
         foreach ($request->questions as $index => $questionData) {
+            // Check if the question already exists in the database
             if (isset($quiz->questions[$index])) {
                 $question = $quiz->questions[$index];
+
+                // Update the question text
                 $question->question = $questionData['question'];
                 $question->save();
 
+                // Delete all the existing options
                 $question->options()->delete();
 
+                // Add new options
                 foreach ($questionData['options'] as $option) {
                     $question->options()->create([
                         'option' => $option,
                     ]);
                 }
 
+                // Update the correct option
                 $question->correct_option = $questionData['correct_option'];
                 $question->save();
+
+                // Mark this question as updated
+                $updatedQuestionIds[] = $question->id;
             } else {
+                // If the question doesn't exist, create a new one
                 $question = $quiz->questions()->create([
                     'question' => $questionData['question'],
                     'correct_option' => $questionData['correct_option'],
                 ]);
 
+                // Create the options for the new question
                 foreach ($questionData['options'] as $option) {
                     $question->options()->create([
                         'option' => $option,
                     ]);
                 }
+
+                // Mark this question as updated
+                $updatedQuestionIds[] = $question->id;
             }
         }
 
+        // Delete questions that were removed from the request
+        $quiz->questions->whereNotIn('id', $updatedQuestionIds)->each(function ($question) {
+            $question->delete();
+        });
+
         return redirect()->route('quiz.edit', $lesson)->with('success', 'Quiz updated successfully');
     }
+
 
     public function start($lesson_id)
     {

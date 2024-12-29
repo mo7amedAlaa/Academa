@@ -10,7 +10,7 @@ class Course extends Model
     //
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'price', 'discount' . 'start_date', 'max_students', 'duration_hours', 'cover_image', 'isFree', 'status', 'category_id', 'level_id', 'instructor_id'];
+    protected $fillable = ['title', 'description', 'price', 'discount', 'start_date', 'max_students', 'duration_hours', 'cover_image', 'isFree', 'status', 'category_id', 'level_id', 'instructor_id'];
 
     public function instructor()
     {

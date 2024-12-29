@@ -1,4 +1,4 @@
-<header class="bg-white hidden md:block   shadow-md py-4">
+<header class="bg-white hidden lg:block   shadow-md py-4">
     <div class="mx-auto flex items-center justify-between px-4">
         <div class="flex items-center space-x-4 w-12 h-12 rounded-full">
             <a href="{{ route('welcome') }}" class="w-full h-full rounded-full">

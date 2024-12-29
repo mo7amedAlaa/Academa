@@ -16,7 +16,8 @@
 
 <body class="  flex flex-col min-h-screen ">
     @include('partials.Header', ['searchResult' => $searchResult ?? null])
-    <main class="flex-1 container mx-auto p-4">
+    @include('partials.mobile_header', ['searchResult' => $searchResult ?? null]) <main
+        class="flex-1 container mx-auto p-4">
         @yield('content')
     </main>
     @include('partials.Footer')

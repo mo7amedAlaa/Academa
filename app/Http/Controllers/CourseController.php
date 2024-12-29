@@ -86,7 +86,7 @@ class CourseController extends Controller
         ]);
 
         $cover_imagePath = $course->cover_image;
-
+        $price = $validated['price'] ?? 0.0;
         if ($request->hasFile('cover_image') && $request->file('cover_image')->isValid()) {
             $cover_image = $request->file('cover_image');
             $cover_imageName = uniqid('cover_image_') . '.' . $cover_image->getClientOriginalExtension();
@@ -97,7 +97,7 @@ class CourseController extends Controller
         $course->update([
             'title' => $validated['title'],
             'description' => $validated['description'],
-            'price' => $validated['price'],
+            'price' => $price,
             'discount' => $validated['discount'],
             'max_students' => $validated['max_students'],
             'duration_hours' => $validated['duration_hours'],
@@ -160,10 +160,8 @@ class CourseController extends Controller
             ->first();
 
         if ($enrollment && $enrollment->pivot->progress_percentage == 100) {
-            // Generate QR code (could be any URL, like a verification page for the certificate)
             $qrData = route('certificate.verify', ['course' => $course->id, 'user' => $user->id]);
 
-            // Generate and store the QR code in the public directory
             $qrCodePath = public_path('qr_codes');
             if (!is_dir($qrCodePath)) {
                 mkdir($qrCodePath, 0755, true);

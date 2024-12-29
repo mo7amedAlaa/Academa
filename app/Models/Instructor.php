@@ -45,4 +45,8 @@ class Instructor extends Model
     {
         return $this->reviews()->avg('rating');
     }
+    public function getTotalReviewsAttribute()
+    {
+        return $this->reviews()->count();
+    }
 }

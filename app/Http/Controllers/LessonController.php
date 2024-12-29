@@ -25,8 +25,8 @@ class LessonController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'content_type' => 'required|in:video,image,link,quiz,practice',
-            'media' => 'nullable|file|mimes:jpg,jpeg,png,mp4,mov', // Adjust file types and size as needed
+            'content_type' => 'required|in:video,image,link,quiz,pdf',
+            'media' => 'nullable|file|mimes:jpg,jpeg,png,mp4,mov,pdf',
             'link' => 'nullable|url|max:255',
             'position' => 'nullable|integer|min:1',
             'is_public' => 'nullable|boolean',

@@ -42,7 +42,18 @@
                 <i class="fas fa-info-circle mr-2"></i> No lessons available for this course yet.
             </div>
             @else
-            <ul class="space-y-2">
+            <div class="block md:hidden">
+                <select id="lesson-select"
+                    class="w-full bg-blue-100 border border-blue-300 text-blue-700 p-3 rounded-lg">
+                    <option value="">Select a Lesson</option>
+                    @foreach($course->lessons()->orderBy('position')->get() as $lesson)
+                    <option value="{{ json_encode($lesson) }}" @if($loop->first) selected @endif>
+                        {{ $lesson->title }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+            <ul class="space-y-2 hidden md:block">
                 @foreach($course->lessons()->orderBy('position')->get() as $lesson)
                 <li>
                     <a href="javascript:void(0)" class="lesson-link text-blue-500 hover:text-blue-700 flex items-center"
@@ -61,8 +72,6 @@
                             auth()->id())->first()->score
                             }}%)</span>
                         @endif
-
-
                         @endif
                     </a>
                 </li>
@@ -88,7 +97,7 @@
 </div>
 
 <div class="mt-6 md:flex md:justify-between">
-    <div class="w-full  ">
+    <div class="w-full">
         <h3 class="text-xl font-semibold mb-3 flex items-center">
             <i class="fas fa-tasks mr-2"></i> Course Progress
         </h3>
@@ -107,7 +116,7 @@
         </div>
 
         <a href="{{ route('my-learning') }}"
-            class="mt-3 text-center  bg-blue-500 text-white py-2 px-2 rounded-lg flex justify-center items-center">
+            class="mt-3 text-center bg-blue-500 text-white py-2 px-2 rounded-lg flex justify-center items-center">
             <i class="fas fa-arrow-left mr-2"></i> Back to Courses
         </a>
     </div>
@@ -117,6 +126,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         const lessonLinks = document.querySelectorAll('.lesson-link');
         const lessonContent = document.getElementById('lesson-content');
+        const lessonSelect = document.getElementById('lesson-select');
 
         function loadLessonContent(lessonData) {
             lessonContent.innerHTML = '';
@@ -136,11 +146,10 @@
                 <img src="{{ asset('${lessonData.media}')}}" alt="${lessonData.title}" class="w-full h-full object-contain rounded-lg">
             </div>`;
             } else if (lessonData.content_type === 'pdf') {
-                contentHTML += `<div class="h-full w-full overflow-hidden">
-                <a href="{{ asset('${lessonData.media}') }}" class="bg-blue-500 text-white py-2 px-4 rounded-lg" target="_blank">
-                    <i class="fas fa-file-pdf mr-2"></i> Download PDF
-                </a>
-            </div>`;
+                contentHTML += `
+                     <div class="h-full w-full overflow-hidden">
+        <embed src="{{ asset('${lessonData.media}') }}" type="application/pdf" width="100%" height="600px" />
+    </div>`;
             } else if (lessonData.content_type === 'quiz') {
                 const quizUrl = `/student/quiz/start/${lessonData.id}`;
                 contentHTML += `<div class="h-full w-full overflow-hidden flex items-center justify-center">
@@ -187,6 +196,11 @@
             const firstLessonData = JSON.parse(lessonLinks[0].getAttribute('data-lesson'));
             loadLessonContent(firstLessonData);
         }
+
+        lessonSelect.addEventListener('change', function (event) {
+            const lessonData = JSON.parse(event.target.value);
+            loadLessonContent(lessonData);
+        });
     });
 </script>
 

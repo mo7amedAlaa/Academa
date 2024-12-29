@@ -3,7 +3,7 @@
 @section('title', $settings['site_name'] . ' | Welcome')
 
 @section('content')
-<div class="flex flex-col ">
+<div class="flex flex-col">
     @if(session('error'))
     <script>
         window.addEventListener('DOMContentLoaded', function () {
@@ -29,54 +29,54 @@
         });
     </script>
     @endif
+
     @auth
-    <div class="flex items-center bg-gradient-to-r from-indigo-500 to-indigo-700 p-8 rounded-lg shadow-xl mb-8 w-full">
-        <i class="fas fa-user-circle text-6xl text-white mr-6"></i>
+    <div
+        class="flex items-center bg-gradient-to-r from-indigo-500 to-indigo-700 p-6 md:p-8 rounded-lg shadow-xl mb-8 w-full">
+        <i class="fas fa-user-circle text-4xl md:text-6xl text-white mr-4 md:mr-6"></i>
         <div class="text-white">
-            <h1 class="text-4xl font-extrabold mb-2">Welcome Back, {{ $user->name }}!</h1>
-            <p class="text-lg">It's great to see you again. We hope you're having a productive day.</p>
+            <h1 class="text-2xl md:text-4xl font-extrabold mb-2">Welcome Back, {{ $user->name }}!</h1>
+            <p class="text-base md:text-lg">It's great to see you again. We hope you're having a productive day.</p>
 
             @if(auth()->user()->hasRole('student'))
             <a href="{{ route('student.dashboard') }}"
-                class="bg-indigo-500 inline-block mt-5 text-white hover:bg-indigo-600 py-2 px-6 rounded-lg text-lg font-semibold capitalize">Go
+                class="bg-indigo-500 inline-block mt-4 md:mt-5 text-white hover:bg-indigo-600 py-2 px-6 rounded-lg text-sm md:text-lg font-semibold capitalize">Go
                 to your Dashboard</a>
             @elseif(auth()->user()->hasRole('instructor'))
             <a href="{{ route('instructors.dashboard') }}"
-                class="bg-indigo-500 inline-block mt-5 text-white hover:bg-indigo-600 py-2 px-6 rounded-lg text-lg font-semibold capitalize">Go
+                class="bg-indigo-500 inline-block mt-4 md:mt-5 text-white hover:bg-indigo-600 py-2 px-6 rounded-lg text-sm md:text-lg font-semibold capitalize">Go
                 to your Dashboard</a>
-
             @endif
-
         </div>
     </div>
     @else
-    <div class="flex items-center bg-gradient-to-r from-green-500 to-green-700 p-8 rounded-lg shadow-xl mb-8 w-full">
-        <i class="fas fa-university text-6xl text-white mr-6"></i>
+    <div
+        class="flex items-center bg-gradient-to-r from-green-500 to-green-700 p-6 md:p-8 rounded-lg shadow-xl mb-8 w-full">
+        <i class="fas fa-university text-4xl md:text-6xl text-white mr-4 md:mr-6"></i>
         <div class="text-white">
-            <h1 class="text-4xl font-extrabold mb-2">Welcome to Academa</h1>
-            <p class="text-lg">Join thousands of learners and instructors on their journey to success.</p>
+            <h1 class="text-2xl md:text-4xl font-extrabold mb-2">Welcome to Academa</h1>
+            <p class="text-base md:text-lg">Join thousands of learners and instructors on their journey to success.</p>
             <a href="{{ route('register') }}"
-                class="bg-green-500 inline-block mt-5 text-white hover:bg-green-600 py-2 px-6 rounded-lg text-lg font-semibold capitalize">
+                class="bg-green-500 inline-block mt-4 md:mt-5 text-white hover:bg-green-600 py-2 px-6 rounded-lg text-sm md:text-lg font-semibold capitalize">
                 Get Started
             </a>
         </div>
     </div>
-    <div class="flex items-center bg-gradient-to-r from-blue-500 to-blue-700 p-8 rounded-lg shadow-xl mb-8 w-full">
-        <i class="fas fa-book-reader text-6xl text-white mr-6"></i>
+    <div
+        class="flex items-center bg-gradient-to-r from-blue-500 to-blue-700 p-6 md:p-8 rounded-lg shadow-xl mb-8 w-full">
+        <i class="fas fa-book-reader text-4xl md:text-6xl text-white mr-4 md:mr-6"></i>
         <div class="text-white">
-            <h1 class="text-4xl font-extrabold mb-2">Learn Online with Academa</h1>
-            <p class="text-lg">Discover new courses, expand your knowledge, and reach your goals.</p>
+            <h1 class="text-2xl md:text-4xl font-extrabold mb-2">Learn Online with Academa</h1>
+            <p class="text-base md:text-lg">Discover new courses, expand your knowledge, and reach your goals.</p>
             <a href="{{ route('login') }}"
-                class="bg-blue-500 inline-block mt-5 text-white hover:bg-blue-600 py-2 px-6 rounded-lg text-lg font-semibold capitalize">
+                class="bg-blue-500 inline-block mt-4 md:mt-5 text-white hover:bg-blue-600 py-2 px-6 rounded-lg text-sm md:text-lg font-semibold capitalize">
                 Sign In
             </a>
         </div>
     </div>
     @endauth
 
-
-
-    <div class="my-12 px-6">
+    <div class="my-8 md:my-12 px-4 md:px-6">
         @foreach ([
         ['title' => 'Top Rated Courses', 'description' => 'These courses are highly rated by students like you!',
         'courses' => $topRatedCourses],

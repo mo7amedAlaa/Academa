@@ -30,8 +30,6 @@
     </script>
     @endif
 
-
-
     @if ($errors->any())
     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
         <ul class="list-disc list-inside">
@@ -42,7 +40,11 @@
     </div>
     @endif
 
-    <h2 class="text-4xl font-semibold mb-6 text-indigo-700">Your Favorite Courses</h2>
+    <div class="flex items-center mb-6">
+        <i class="fas fa-heart text-4xl text-indigo-700 mr-3"></i>
+        <h2 class="text-4xl font-semibold text-indigo-700">Your Favorite Courses</h2>
+    </div>
+
     <p class="text-lg mb-8 text-gray-700">Courses you have added to your favorites!</p>
 
     @if(!$favorites || $favorites->isEmpty())
@@ -60,6 +62,7 @@
         <div class="bg-white shadow-xl rounded-lg overflow-hidden">
             <img src="{{ asset($favorite->cover_image ?? 'default-image.jpg') }}" alt="{{ $favorite->title }}"
                 class="w-full h-48 object-cover">
+
             <div class="p-5">
                 <h3 class="text-xl font-semibold mb-2 text-gray-800 truncate" title="{{ $favorite->title }}">
                     {{ $favorite->title }}
@@ -68,8 +71,7 @@
                         $favorite->instructor?->user->name }}</span></p>
                 <span class="text-lg font-semibold text-gray-900">${{ $favorite->price }}</span>
 
-                <div class="mt-4 flex justify-between space-x-4">
-                    <!-- Remove from Favorites Button -->
+                <div class="mt-4 flex flex-col space-y-4">
                     <form action="{{ route('favorites.remove') }}" method="post" class="w-full">
                         @csrf
                         @method('POST')
@@ -85,12 +87,11 @@
                         @enderror
 
                         <button type="submit"
-                            class="inline-block w-full  bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 focus:outline-none transition duration-300 ease-in-out">
-                            Remove from Favorites
+                            class="flex items-center justify-center w-full bg-red-600 text-white py-3 px-4 rounded-lg hover:bg-red-700 focus:outline-none transition duration-300 ease-in-out text-center">
+                            <i class="fas fa-heart-broken mr-2"></i> Remove from Favorites
                         </button>
                     </form>
 
-                    <!-- Add to Cart Button -->
                     <form action="{{ route('cart.add') }}" method="POST" class="w-full">
                         @csrf
                         <input type="hidden" name="id" value="{{ $favorite->id }}">
@@ -101,8 +102,8 @@
                         <input type="hidden" name="quantity" value="1">
 
                         <button type="submit"
-                            class="inline-block w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none transition duration-300 ease-in-out">
-                            Add to Cart
+                            class="flex items-center justify-center w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none transition duration-300 ease-in-out text-center">
+                            <i class="fas fa-cart-plus mr-2"></i> Add to Cart
                         </button>
                     </form>
                 </div>

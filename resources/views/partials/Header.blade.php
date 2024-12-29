@@ -1,4 +1,4 @@
-<header class="bg-white shadow-md py-4   ">
+<header class="bg-white  hidden lg:block shadow-md py-4   ">
     <div class="mx-auto flex     items-center justify-between px-4">
         <div class="flex items-center space-x-4 w-12 h-12 rounded-full">
             <a href="{{ route('welcome') }}" class="w-full h-full rounded-full">
@@ -279,6 +279,10 @@
                                 class="border-t  pt-2 text-sm text-gray-700 hover:text-green-600">Dashboard</a></li>
                         @elseif(auth()->user()->hasRole('instructor'))
                         <li><a href="{{ route('instructors.dashboard') }}"
+                                class="border-t pt-2 text-sm text-gray-700 hover:text-green-600">Dashboard</a>
+                        </li>
+                        @elseif(auth()->user()->hasRole('admin'))
+                        <li><a href="{{ route('admin.dashboard') }}"
                                 class="border-t pt-2 text-sm text-gray-700 hover:text-green-600">Dashboard</a>
                         </li>
                         @endif

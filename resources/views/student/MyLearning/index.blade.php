@@ -5,6 +5,8 @@
 @section('content')
 <div class="container mx-auto py-12 px-2 md:px-4 min-h-screen">
     <h1 class="text-center text-3xl font-bold mb-8">My Learning</h1>
+
+    <!-- Display session messages -->
     @if(session('error'))
     <script>
         window.addEventListener('DOMContentLoaded', function () {
@@ -39,13 +41,14 @@
     @else
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach($courses as $course)
-        <div class="relative bg-white shadow-lg rounded-lg overflow-hidden">
+        <div
+            class="relative bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition duration-300">
             <form action="{{ route('my-learning.delete', $course->id) }}" method="POST" class="absolute top-2 right-2">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="text-red-500 bg-white rounded-full shadow hover:bg-red-100 transition p-1"
                     title="Delete Course">
-                    &times;
+                    <i class="fas fa-times"></i>
                 </button>
             </form>
 
@@ -63,8 +66,7 @@
 
                 <div class="relative w-full bg-gray-200 rounded-full h-3 mt-4">
                     <div class="absolute top-0 left-0 h-3 bg-green-500 rounded-full"
-                        style="width: {{ $course->pivot->progress_percentage }}%;">
-                    </div>
+                        style="width: {{ $course->pivot->progress_percentage }}%;"></div>
                 </div>
                 <span class="text-sm text-gray-600 block mt-1">
                     {{ $course->pivot->progress_percentage }}% Complete
@@ -72,7 +74,8 @@
 
                 @if($course->pivot->expired_date)
                 <span class="text-sm text-red-500 block mt-2">
-                    Expires on: {{ \Carbon\Carbon::parse($course->pivot->expired_date)->format('F j, Y') }}
+                    <i class="fas fa-calendar-times mr-2"></i>Expires on: {{
+                    \Carbon\Carbon::parse($course->pivot->expired_date)->format('F j, Y') }}
                 </span>
                 @endif
 
@@ -85,7 +88,7 @@
                 @else
                 <a href="{{ route('courses.content', $course->id) }}"
                     class="block mt-4 text-center bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">
-                    Continue Learning
+                    <i class="fas fa-play-circle mr-2"></i> Continue Learning
                 </a>
                 @endif
 
