@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\CheckFakeEmail;
 use App\Http\Middleware\CheckInstructorBanned;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => RoleMiddleware::class,
             'check.instructor.banned' => CheckInstructorBanned::class,
+            'CheckFakeEmail' => CheckFakeEmail::class,
 
         ]);
     })

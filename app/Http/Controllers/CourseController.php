@@ -160,8 +160,10 @@ class CourseController extends Controller
             ->first();
 
         if ($enrollment && $enrollment->pivot->progress_percentage == 100) {
+            // Generate QR code (could be any URL, like a verification page for the certificate)
             $qrData = route('certificate.verify', ['course' => $course->id, 'user' => $user->id]);
 
+            // Generate and store the QR code in the public directory
             $qrCodePath = public_path('qr_codes');
             if (!is_dir($qrCodePath)) {
                 mkdir($qrCodePath, 0755, true);

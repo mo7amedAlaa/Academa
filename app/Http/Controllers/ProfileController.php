@@ -69,7 +69,7 @@ class ProfileController extends Controller
         }
 
         return redirect()->route('profile.show')
-            ->with('status', 'Profile updated successfully.');
+            ->with('success', 'Profile updated successfully.');
     }
 
     private function handleAvatarUpload($user, $avatarFile)

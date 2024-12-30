@@ -145,6 +145,9 @@
                 @elseif(auth()->user()->hasRole('instructor'))
                 <li><a href="{{ route('instructors.dashboard') }}" class="hover:text-blue-300">Dashboard</a>
                 </li>
+                @elseif(auth()->user()->hasRole('admin'))
+                <li><a href="{{ route('admin.dashboard') }}" class="hover:text-blue-300">Dashboard</a>
+                </li>
                 @endif
                 <li><a href="{{ route('logout') }}" class="hover:text-red-300">Logout</a></li>
                 @else

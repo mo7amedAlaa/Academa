@@ -28,25 +28,37 @@
                         <img src="{{ asset($admin->avatar) }}" alt="Profile Picture" class="w-16 h-16 rounded-full">
                         <input type="file" name="profile_picture" id="profile_picture"
                             class="block w-full border border-gray-300 p-2 rounded">
+                        @error('profile_picture')
+                        <p class="text-red-600 text-sm">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
                 <div>
                     <label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
                     <input type="text" name="name" id="name" value="{{ $admin->name }}"
-                        class="block w-full border border-gray-300 p-2 rounded" required>
+                        class="block w-full border border-gray-300 p-2 rounded">
+                    @error('name')
+                    <p class="text-red-600 text-sm">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
                     <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
                     <input type="email" name="email" id="email" value="{{ $admin->email }}"
                         class="block w-full border border-gray-300 p-2 rounded" required>
+                    @error('email')
+                    <p class="text-red-600 text-sm">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
                     <label for="current_password" class="block text-gray-700 font-medium mb-2">Current Password</label>
                     <input type="password" name="current_password" id="current_password"
                         class="block w-full border border-gray-300 p-2 rounded" required>
+                    @error('current_password')
+                    <p class="text-red-600 text-sm">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
@@ -54,6 +66,9 @@
                     <input type="password" name="password" id="password"
                         class="block w-full border border-gray-300 p-2 rounded">
                     <small class="text-gray-500">Leave blank to keep current password</small>
+                    @error('password')
+                    <p class="text-red-600 text-sm">{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\GLoginController;
 use App\Http\Controllers\SupportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
@@ -26,29 +27,33 @@ use App\Http\Controllers\Auth\PasswordResetController;
 
 // Public Routes
 Route::get('/', [AuthController::class, 'welcome'])->name('welcome');
+Route::middleware('CheckFakeEmail')->group(function () {
+    Route::post('/register', [AuthController::class, 'store'])->name('store');
+    Route::post('/instructors', [InstructorController::class, 'store'])->name('instructors.store');
+});
 Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/register', [AuthController::class, 'store'])->name('store');
+Route::get('/instructors/create', [InstructorController::class, 'create'])->name('instructors.create');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('authenticate');
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::get('/categories/{id}/courses', [CategoryController::class, 'showCourses'])->name('categories.courses');
-Route::get('/instructors/create', [InstructorController::class, 'create'])->name('instructors.create');
-Route::post('/instructors', [InstructorController::class, 'store'])->name('instructors.store');
+
 Route::get('password/reset', [PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('password/email', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('password/reset/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/update', [PasswordResetController::class, 'reset'])->name('password.update');
 Route::get('/email/verify', [VerificationController::class, 'notice'])->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', action: [VerificationController::class, 'verify'])->name('verification.verify');
 Route::get('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
-
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('login/google', [GLoginController::class, 'redirectToGoogle']);
+Route::get('login/google/callback', [GLoginController::class, 'handleGoogleCallback']);
 // Authenticated Routes
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
 
     Route::get('/settings', [AccountController::class, 'edit'])->name('settings');
     Route::middleware('verified')->put('/settings', [AccountController::class, 'update'])->name('account.update');

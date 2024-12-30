@@ -29,14 +29,14 @@ class AccountController extends Controller
             return redirect()->route('settings')->withErrors(['current_password' => $updateResult['error']]);
         }
 
-        return redirect()->route('settings')->with('status', 'Account updated successfully.');
+        return redirect()->route('settings')->with('success', 'Account updated successfully.');
     }
 
     public function delete()
     {
         if (AccountFacade::deleteAccount()) {
 
-            return redirect()->route('login')->with('status', 'Account deleted successfully. You have been logged out.');
+            return redirect()->route('login')->with('success', 'Account deleted successfully. You have been logged out.');
         } else {
             return redirect()->route('settings')->with('error', 'Failed to delete account. Please try again.');
         }
