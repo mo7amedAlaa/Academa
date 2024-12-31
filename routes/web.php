@@ -37,7 +37,8 @@ Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('authenticate');
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::get('/categories/{id}/courses', [CategoryController::class, 'showCourses'])->name('categories.courses');
-
+Route::get('/instructor/review/{id}', [ReviewController::class, 'show'])->name('instructor.review');
+Route::get('/courses/{id}', action: [CourseController::class, 'show'])->name('courses.show');
 Route::get('password/reset', [PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('password/email', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('password/reset/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
@@ -48,17 +49,15 @@ Route::get('/email/resend', [VerificationController::class, 'resend'])->name('ve
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('login/google', [GLoginController::class, 'redirectToGoogle']);
 Route::get('login/google/callback', [GLoginController::class, 'handleGoogleCallback']);
+
 // Authenticated Routes
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-
     Route::get('/settings', [AccountController::class, 'edit'])->name('settings');
     Route::middleware('verified')->put('/settings', [AccountController::class, 'update'])->name('account.update');
     Route::delete('/settings/delete', [AccountController::class, 'delete'])->name('account.delete');
-    Route::get('/instructor/review/{id}', [ReviewController::class, 'show'])->name('instructor.review');
     Route::get('/notification/{id}/read', [NotificationController::class, 'read'])->name('notification.read');
     Route::post('/notifications/clear', [NotificationController::class, 'clearAll'])->name('notifications.clear');
     Route::delete('/notifications/{id}', [NotificationController::class, 'delete'])->name('notification.delete');
